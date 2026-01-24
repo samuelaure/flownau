@@ -1,18 +1,41 @@
 import { JSONFilePreset } from 'lowdb/node';
 import { config } from './config';
 
-const defaultData = { projects: {}, projectConfig: {} };
+interface ProjectConfig {
+  shortCode: string;
+  videoCounter: number;
+  audioCounter: number;
+}
+
+interface AssetEntry {
+  type: 'VID' | 'AUD';
+  system_filename: string;
+  original_filename: string;
+  hash: string;
+  r2_key: string;
+  size: number;
+  counter: number;
+  uploaded_at: string;
+  status: string;
+}
+
+interface ManifestData {
+  projects: Record<string, AssetEntry[]>;
+  projectConfig: Record<string, ProjectConfig>;
+}
+
+const defaultData: ManifestData = { projects: {}, projectConfig: {} };
 
 export async function getManifest() {
-  const db = await JSONFilePreset(config.manifestFile, defaultData);
+  const db = await JSONFilePreset<ManifestData>(config.manifestFile, defaultData);
   return db;
 }
 
-export async function getProjectConfig(db: any, projectName: string) {
+export async function getProjectConfig(db: { data: ManifestData }, projectName: string) {
   return db.data.projectConfig[projectName] || null;
 }
 
-export async function setProjectConfig(db: any, projectName: string, configData: any) {
+export async function setProjectConfig(db: { data: ManifestData; write: () => Promise<void> }, projectName: string, configData: any) {
   db.data.projectConfig[projectName] = {
     shortCode: configData.shortCode.toUpperCase(),
     videoCounter: configData.videoCounter || 0,
@@ -24,7 +47,12 @@ export async function setProjectConfig(db: any, projectName: string, configData:
 /**
  * Adds an asset and increments the appropriate counter
  */
-export async function addAsset(db: any, projectName: string, type: 'VID' | 'AUD', assetData: any) {
+export async function addAsset(
+  db: { data: ManifestData; write: () => Promise<void> },
+  projectName: string,
+  type: 'VID' | 'AUD',
+  assetData: any
+) {
   if (!db.data.projects[projectName]) {
     db.data.projects[projectName] = [];
   }
@@ -34,7 +62,7 @@ export async function addAsset(db: any, projectName: string, type: 'VID' | 'AUD'
   db.data.projectConfig[projectName][counterKey] += 1;
   const currentCounter = db.data.projectConfig[projectName][counterKey];
 
-  const entry = {
+  const entry: AssetEntry = {
     type: type, // 'VID' or 'AUD'
     system_filename: assetData.system_filename,
     original_filename: assetData.original_filename,
@@ -51,7 +79,7 @@ export async function addAsset(db: any, projectName: string, type: 'VID' | 'AUD'
   return entry;
 }
 
-export function findAssetByHash(db: any, projectName: string, hash: string) {
+export function findAssetByHash(db: { data: ManifestData }, projectName: string, hash: string) {
   const projectAssets = db.data.projects[projectName] || [];
-  return projectAssets.find((asset: any) => asset.hash === hash);
+  return projectAssets.find((asset: AssetEntry) => asset.hash === hash);
 }

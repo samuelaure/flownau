@@ -8,7 +8,17 @@ const connection: ConnectionOptions = {
     maxRetriesPerRequest: null,
 };
 
+import { logger } from "./logger";
+
 export const redisConnection = new IORedis(connection);
+
+redisConnection.on("error", (error) => {
+    logger.error({ err: error }, "Redis connection error");
+});
+
+redisConnection.on("connect", () => {
+    logger.info("Connected to Redis");
+});
 
 export const renderQueue = new Queue("render-queue", {
     connection: redisConnection
