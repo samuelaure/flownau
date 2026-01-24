@@ -9,6 +9,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
     title: "Flownaŭ",
     description: "Unified media automation platform",
+    icons: {
+        icon: "/favicon.png",
+    },
 };
 
 export default function RootLayout({
