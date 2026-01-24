@@ -1,0 +1,431 @@
+{
+  "projects": {
+    "astrologia_familiar": [
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0001.mp4",
+        "original_filename": "astro-background-video-1.mp4",
+        "hash": "09c392616d91196d9668394978a8b9d2ceda39b6f678cc14b0719e835ed8041c",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0001.mp4",
+        "size": 381800,
+        "counter": 1,
+        "uploaded_at": "2026-01-18T22:33:33.090Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0002.mp4",
+        "original_filename": "astro-background-video-10.mp4",
+        "hash": "f25684d853ed96b849ef15b68786908467179b18b586c393d9690dcb6b4d448e",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0002.mp4",
+        "size": 1773740,
+        "counter": 2,
+        "uploaded_at": "2026-01-18T22:33:37.324Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0003.mp4",
+        "original_filename": "astro-background-video-11.mp4",
+        "hash": "35d5a845c60ed8081b632aa239908960371e8c07937be700e0a0a55b8f723208",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0003.mp4",
+        "size": 982485,
+        "counter": 3,
+        "uploaded_at": "2026-01-18T22:33:45.920Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0004.mp4",
+        "original_filename": "astro-background-video-12.mp4",
+        "hash": "425a5c280df6bbfd9f78896a4a38f277c85a7a928536a61938224ecfb53857b0",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0004.mp4",
+        "size": 811556,
+        "counter": 4,
+        "uploaded_at": "2026-01-18T22:33:48.074Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0005.mp4",
+        "original_filename": "astro-background-video-13.mp4",
+        "hash": "45a2c1c90c0d46e62d8424c0377e9c9e9a93f4cb41ebe9aa7cad8a2b5707139a",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0005.mp4",
+        "size": 3325725,
+        "counter": 5,
+        "uploaded_at": "2026-01-18T22:33:54.032Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0006.mp4",
+        "original_filename": "astro-background-video-14.mp4",
+        "hash": "74955a302c7e179e344a9d7203fe9a6cb8e3c48dfa61146ab5cd32875f8dae03",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0006.mp4",
+        "size": 1509614,
+        "counter": 6,
+        "uploaded_at": "2026-01-18T22:33:59.412Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0007.mp4",
+        "original_filename": "astro-background-video-15.mp4",
+        "hash": "fcc5c2edc22eaefb403cdffa0ed2807701dee0e72b1400f960693a13842ff916",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0007.mp4",
+        "size": 1217441,
+        "counter": 7,
+        "uploaded_at": "2026-01-18T22:34:03.985Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0008.mp4",
+        "original_filename": "astro-background-video-16.mp4",
+        "hash": "b86746a5dc72b00615224ef63899e0d7499c88a46e42d1729a2108450f33fde4",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0008.mp4",
+        "size": 898392,
+        "counter": 8,
+        "uploaded_at": "2026-01-18T22:34:07.161Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0009.mp4",
+        "original_filename": "astro-background-video-17.mp4",
+        "hash": "e59475eeb199ab85e691762f8f93c07ed3d3bbafbe4eb0330c8a3a3d9998e3ae",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0009.mp4",
+        "size": 943836,
+        "counter": 9,
+        "uploaded_at": "2026-01-18T22:34:15.007Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0010.mp4",
+        "original_filename": "astro-background-video-18.mp4",
+        "hash": "4d55755e172b8006a65cedaff173239f9c94d748a58db1a529b01307b307bfae",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0010.mp4",
+        "size": 1168774,
+        "counter": 10,
+        "uploaded_at": "2026-01-18T22:34:22.100Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0011.mp4",
+        "original_filename": "astro-background-video-19.mp4",
+        "hash": "5763dd5ae69ba087f7c1e6d8f61ddde11e9a47e1614cb366c36402acebf0c14e",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0011.mp4",
+        "size": 1486419,
+        "counter": 11,
+        "uploaded_at": "2026-01-18T22:34:31.190Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0012.mp4",
+        "original_filename": "astro-background-video-2.mp4",
+        "hash": "65c8685c979e21ef3b8a638bbdbd12c76d02855da7158e1ab670fa09cb915872",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0012.mp4",
+        "size": 1226331,
+        "counter": 12,
+        "uploaded_at": "2026-01-18T22:34:39.134Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0013.mp4",
+        "original_filename": "astro-background-video-20.mp4",
+        "hash": "9b4c17993b7ed4981ac5d476ba3c71a0bdd3becd1585fea67b7ab4660c60d8ab",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0013.mp4",
+        "size": 783663,
+        "counter": 13,
+        "uploaded_at": "2026-01-18T22:34:42.656Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0014.mp4",
+        "original_filename": "astro-background-video-21.mp4",
+        "hash": "a55e287baf9b506e214e8a2e36d62ec13d48ff33438c5e68ec3523ad5e565cfa",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0014.mp4",
+        "size": 735917,
+        "counter": 14,
+        "uploaded_at": "2026-01-18T22:34:46.311Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0015.mp4",
+        "original_filename": "astro-background-video-22.mp4",
+        "hash": "f9025b2c7ac999d2295cac62397ebfab058edf0152aaf1daafaea3b9ad207dca",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0015.mp4",
+        "size": 100702,
+        "counter": 15,
+        "uploaded_at": "2026-01-18T22:34:49.835Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0016.mp4",
+        "original_filename": "astro-background-video-23.mp4",
+        "hash": "624ea5243d9c6337fea1640f6d65f27c7328d82a446435827358492639b3a5b2",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0016.mp4",
+        "size": 3181341,
+        "counter": 16,
+        "uploaded_at": "2026-01-18T22:35:01.224Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0017.mp4",
+        "original_filename": "astro-background-video-24.mp4",
+        "hash": "6e9fb2ea6f34869140ff38c9775d8862c39232aaaaefa8a4d02400d775ea28ba",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0017.mp4",
+        "size": 1225588,
+        "counter": 17,
+        "uploaded_at": "2026-01-18T22:35:06.459Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0018.mp4",
+        "original_filename": "astro-background-video-25.mp4",
+        "hash": "c2e9f53bc4075243e1a68619664b5da0def05f0a875487ae389964bb9c2fda7c",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0018.mp4",
+        "size": 611141,
+        "counter": 18,
+        "uploaded_at": "2026-01-18T22:35:12.151Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0019.mp4",
+        "original_filename": "astro-background-video-26.mp4",
+        "hash": "e1911ad89d43df1da34b8b6380ed4474440665a502ad86a2e4a54153089896b0",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0019.mp4",
+        "size": 1251167,
+        "counter": 19,
+        "uploaded_at": "2026-01-18T22:35:19.214Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0020.mp4",
+        "original_filename": "astro-background-video-27.mp4",
+        "hash": "4c2dfd858d3589c99d2dd8293147440bcc339b28951ecea7db84a4e45302ee76",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0020.mp4",
+        "size": 3992304,
+        "counter": 20,
+        "uploaded_at": "2026-01-18T22:35:29.123Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0021.mp4",
+        "original_filename": "astro-background-video-28.mp4",
+        "hash": "f57bab9382dac3573939e8923d8b44e4dcb4a9444dcdafe47b7c7cb12fc4281d",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0021.mp4",
+        "size": 3223705,
+        "counter": 21,
+        "uploaded_at": "2026-01-18T22:35:44.342Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0022.mp4",
+        "original_filename": "astro-background-video-3.mp4",
+        "hash": "37454e20842e5203770cc21f693e13060c6d8afa8a4a83da8996b19716e23bf8",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0022.mp4",
+        "size": 1878966,
+        "counter": 22,
+        "uploaded_at": "2026-01-18T22:37:17.644Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0023.mp4",
+        "original_filename": "astro-background-video-4.mp4",
+        "hash": "a9f93a6ad7c2ac6e751d9bf9a7cc2992d7a3953d7cacb4c2b7d7f02fa0a6ebbe",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0023.mp4",
+        "size": 1422262,
+        "counter": 23,
+        "uploaded_at": "2026-01-18T22:37:22.323Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0024.mp4",
+        "original_filename": "astro-background-video-5.mp4",
+        "hash": "9b84feab9c9b2da46bbacc76c6fd347a5169bdcf9675468d51cfc6c6efebe9e8",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0024.mp4",
+        "size": 3255887,
+        "counter": 24,
+        "uploaded_at": "2026-01-18T22:38:03.074Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0025.mp4",
+        "original_filename": "astro-background-video-6.mp4",
+        "hash": "a03419c67d3aa0b3353b01d0f4cd7e667de08af02c57922fe9195452d24fa85a",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0025.mp4",
+        "size": 4235571,
+        "counter": 25,
+        "uploaded_at": "2026-01-18T22:38:25.325Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0026.mp4",
+        "original_filename": "astro-background-video-7.mp4",
+        "hash": "75a03bc2ae8710298ec7d834c39e5bb4c4a06cdd166ce08c3d8fe76aaf972a81",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0026.mp4",
+        "size": 31703908,
+        "counter": 26,
+        "uploaded_at": "2026-01-18T22:39:40.788Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0027.mp4",
+        "original_filename": "astro-background-video-8.mp4",
+        "hash": "0e78640a1b13bcded73cf25bfebdb4fed42cd1be78c8269de59b12f2ab2f4f28",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0027.mp4",
+        "size": 4751031,
+        "counter": 27,
+        "uploaded_at": "2026-01-18T22:39:51.936Z",
+        "status": "active"
+      },
+      {
+        "type": "VID",
+        "system_filename": "ASFA_VID_0028.mp4",
+        "original_filename": "astro-background-video-9.mp4",
+        "hash": "125a69265d2c40c410e1e74792a58e510ca86529a3ff9d2beadd6d67944c7943",
+        "r2_key": "astrologia_familiar/videos/ASFA_VID_0028.mp4",
+        "size": 1609026,
+        "counter": 28,
+        "uploaded_at": "2026-01-18T22:39:56.361Z",
+        "status": "active"
+      },
+      {
+        "type": "AUD",
+        "system_filename": "ASFA_AUD_0001.m4a",
+        "original_filename": "astro-background-music-1.mp3",
+        "hash": "9537bb36095b0fd1ca8e402b7b631faec4b20fdf29e1c87abfd11cdfc3c82231",
+        "r2_key": "astrologia_familiar/audios/ASFA_AUD_0001.m4a",
+        "size": 1543004,
+        "counter": 1,
+        "uploaded_at": "2026-01-18T22:45:23.124Z",
+        "status": "active"
+      },
+      {
+        "type": "AUD",
+        "system_filename": "ASFA_AUD_0002.m4a",
+        "original_filename": "astro-background-music-10.mp3",
+        "hash": "9aeb3f9022b4cc0af8ab0f6e59251a13a8cffcfe8891c50a6ad87f51a1f928a6",
+        "r2_key": "astrologia_familiar/audios/ASFA_AUD_0002.m4a",
+        "size": 3708795,
+        "counter": 2,
+        "uploaded_at": "2026-01-18T22:49:38.654Z",
+        "status": "active"
+      },
+      {
+        "type": "AUD",
+        "system_filename": "ASFA_AUD_0003.m4a",
+        "original_filename": "astro-background-music-2.mp3",
+        "hash": "7f4326041da14a76fcd2599eba83cc75a641026dcec97a2a2e2bcaafd4391af6",
+        "r2_key": "astrologia_familiar/audios/ASFA_AUD_0003.m4a",
+        "size": 2377950,
+        "counter": 3,
+        "uploaded_at": "2026-01-18T22:49:49.848Z",
+        "status": "active"
+      },
+      {
+        "type": "AUD",
+        "system_filename": "ASFA_AUD_0004.m4a",
+        "original_filename": "astro-background-music-3.mp3",
+        "hash": "1bb3bdad311aa09426b131122c44ec3bea13079f9296ba9dd73ed5a437829dc1",
+        "r2_key": "astrologia_familiar/audios/ASFA_AUD_0004.m4a",
+        "size": 956241,
+        "counter": 4,
+        "uploaded_at": "2026-01-18T22:49:54.229Z",
+        "status": "active"
+      },
+      {
+        "type": "AUD",
+        "system_filename": "ASFA_AUD_0005.m4a",
+        "original_filename": "astro-background-music-4.mp3",
+        "hash": "81f4c9ab0686b4e5e3d16dc3f42138c98ee8d4480f911b8fd0fb5bb957f427b2",
+        "r2_key": "astrologia_familiar/audios/ASFA_AUD_0005.m4a",
+        "size": 3208225,
+        "counter": 5,
+        "uploaded_at": "2026-01-18T22:50:07.135Z",
+        "status": "active"
+      },
+      {
+        "type": "AUD",
+        "system_filename": "ASFA_AUD_0006.m4a",
+        "original_filename": "astro-background-music-5.mp3",
+        "hash": "f8e11d58d7e62755421b9c8744fca39f43f4aa66eaf65acbdaab6145cb05d127",
+        "r2_key": "astrologia_familiar/audios/ASFA_AUD_0006.m4a",
+        "size": 3085642,
+        "counter": 6,
+        "uploaded_at": "2026-01-18T22:50:17.748Z",
+        "status": "active"
+      },
+      {
+        "type": "AUD",
+        "system_filename": "ASFA_AUD_0007.m4a",
+        "original_filename": "astro-background-music-6.mp3",
+        "hash": "3c442841e9209462d7c12f04ed9372b64df9c6ff0a609c15ff60f088878855ba",
+        "r2_key": "astrologia_familiar/audios/ASFA_AUD_0007.m4a",
+        "size": 3760971,
+        "counter": 7,
+        "uploaded_at": "2026-01-18T22:50:32.557Z",
+        "status": "active"
+      },
+      {
+        "type": "AUD",
+        "system_filename": "ASFA_AUD_0008.m4a",
+        "original_filename": "astro-background-music-7.mp3",
+        "hash": "072941a5ce0b46fa9b1354aaa3c5ccf42ea66011956b615c0fc452956e064463",
+        "r2_key": "astrologia_familiar/audios/ASFA_AUD_0008.m4a",
+        "size": 2865541,
+        "counter": 8,
+        "uploaded_at": "2026-01-18T22:50:43.862Z",
+        "status": "active"
+      },
+      {
+        "type": "AUD",
+        "system_filename": "ASFA_AUD_0009.m4a",
+        "original_filename": "astro-background-music-8.mp3",
+        "hash": "adea159a54bcc89226d7cce17bfc70cba77f044a352fd5a5796756eee78f2839",
+        "r2_key": "astrologia_familiar/audios/ASFA_AUD_0009.m4a",
+        "size": 4904408,
+        "counter": 9,
+        "uploaded_at": "2026-01-18T22:50:59.849Z",
+        "status": "active"
+      },
+      {
+        "type": "AUD",
+        "system_filename": "ASFA_AUD_0010.m4a",
+        "original_filename": "astro-background-music-9.mp3",
+        "hash": "dbabca170184c12ce8972a27687cb480c66013a2145fb327ccd1b6c2683b2e67",
+        "r2_key": "astrologia_familiar/audios/ASFA_AUD_0010.m4a",
+        "size": 2434571,
+        "counter": 10,
+        "uploaded_at": "2026-01-18T22:51:07.722Z",
+        "status": "active"
+      }
+    ]
+  },
+  "projectConfig": {
+    "astrologia_familiar": {
+      "shortCode": "ASFA",
+      "videoCounter": 28,
+      "audioCounter": 10
+    }
+  }
+}
