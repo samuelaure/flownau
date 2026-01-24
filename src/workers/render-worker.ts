@@ -9,35 +9,41 @@ import fs from "fs/promises";
 import { r2Client } from "@/lib/r2";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 
+import { workerLogger } from "@/lib/logger";
+
 const BUNDLE_PATH = path.join(process.cwd(), "src/remotion/index.ts");
 
 export const renderWorker = new Worker(
     "render-queue",
     async (job: Job) => {
         const { renderId } = job.data;
-
-        const render = await prisma.render.findUnique({
-            where: { id: renderId },
-            include: { project: { include: { workspace: true } } }
-        });
-
-        if (!render) throw new Error("Render not found");
-
-        await prisma.render.update({
-            where: { id: renderId },
-            data: { status: "PROCESSING" }
-        });
-
-        const outputFilename = `render_${renderId}.mp4`;
-        const outputPath = path.join(os.tmpdir(), outputFilename);
+        const log = workerLogger.child({ renderId, jobId: job.id });
 
         try {
-            console.log(`🚀 Starting render for ${renderId}...`);
+            const render = await prisma.render.findUnique({
+                where: { id: renderId },
+                include: { project: { include: { workspace: true } } }
+            });
+
+            if (!render) {
+                log.error("Render entity not found in database");
+                throw new Error("Render not found");
+            }
+
+            await prisma.render.update({
+                where: { id: renderId },
+                data: { status: "PROCESSING" }
+            });
+
+            log.info("Starting video render");
+
+            const outputFilename = `render_${renderId}.mp4`;
+            const outputPath = path.join(os.tmpdir(), outputFilename);
 
             const bundled = await bundle(BUNDLE_PATH);
             const composition = await selectComposition({
                 serveUrl: bundled,
-                id: "Main", // Adjust based on your Root.tsx
+                id: "Main",
                 inputProps: render.params as any,
             });
 
@@ -49,7 +55,7 @@ export const renderWorker = new Worker(
                 inputProps: render.params as any,
             });
 
-            console.log(`✅ Render finished. Uploading to R2...`);
+            log.info("Render finished locally, uploading to R2");
 
             const r2Key = `${render.project.workspaceId}/${render.projectId}/renders/${outputFilename}`;
             const fileBuffer = await fs.readFile(outputPath);
@@ -72,16 +78,18 @@ export const renderWorker = new Worker(
                 }
             });
 
-            // Cleanup
             await fs.unlink(outputPath);
+            log.info({ r2Key }, "Render fully completed and uploaded");
 
             return { success: true, r2Key };
         } catch (error: any) {
-            console.error(`❌ Render failed:`, error);
+            log.error({ err: error }, "Render job failed");
+
             await prisma.render.update({
                 where: { id: renderId },
                 data: { status: "FAILED" }
             });
+
             throw error;
         }
     },

@@ -1,20 +1,23 @@
+import { workerLogger } from "@/lib/logger";
 import { renderWorker } from "./workers/render-worker";
 import { publishWorker } from "./workers/publish-worker";
+import { Job } from "bullmq";
 
-console.log("🛠️  Flownaŭ Background Worker started...");
+workerLogger.info("🛠️  Flownaŭ Background Worker started...");
 
-renderWorker.on("completed", (job) => {
-    console.log(`✅ Render job ${job.id} completed`);
+renderWorker.on("completed", (job: Job) => {
+    workerLogger.info({ jobId: job.id }, "Render job completed");
 });
 
-renderWorker.on("failed", (job, err: Error) => {
-    console.log(`❌ Render job ${job?.id} failed: ${err.message}`);
+renderWorker.on("failed", (job: Job | undefined, err: Error) => {
+    workerLogger.error({ jobId: job?.id, err }, "Render job failed");
 });
 
-publishWorker.on("completed", (job) => {
-    console.log(`✅ Publish job ${job.id} completed`);
+publishWorker.on("completed", (job: Job) => {
+    workerLogger.info({ jobId: job.id }, "Publish job completed");
 });
 
-publishWorker.on("failed", (job, err: Error) => {
-    console.log(`❌ Publish job ${job?.id} failed: ${err.message}`);
+publishWorker.on("failed", (job: Job | undefined, err: Error) => {
+    workerLogger.error({ jobId: job?.id, err }, "Publish job failed");
 });
+

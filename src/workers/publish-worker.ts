@@ -4,34 +4,37 @@ import prisma from "@/lib/prisma";
 import { publishToInstagram } from "@/remotion/core/instagram";
 import { getSocialToken } from "@/actions/social";
 
+import { workerLogger } from "@/lib/logger";
+
 export const publishWorker = new Worker(
     "publish-queue",
     async (job: Job) => {
         const { renderId, socialAccountId, caption } = job.data;
-
-        const render = await prisma.render.findUnique({
-            where: { id: renderId },
-        });
-
-        if (!render || !render.outputUrl) {
-            throw new Error("Render output not found or not ready");
-        }
-
-        const account = await prisma.socialAccount.findUnique({
-            where: { id: socialAccountId }
-        });
-
-        if (!account) throw new Error("Social account not found");
-
-        // Decrypt the token for usage
-        const accessToken = await getSocialToken(socialAccountId);
-
-        console.log(`📸 Publishing to Instagram (${account.profileName})...`);
+        const log = workerLogger.child({ renderId, socialAccountId, jobId: job.id });
 
         try {
-            // Note: We need to ensure remotion/core/instagram uses the provided token 
-            // instead of reading from process.env directly. 
-            // I'll need to refactor the IG utility slightly.
+            const render = await prisma.render.findUnique({
+                where: { id: renderId },
+            });
+
+            if (!render || !render.outputUrl) {
+                log.error("Render output not found or not ready for publishing");
+                throw new Error("Render output not found or not ready");
+            }
+
+            const account = await prisma.socialAccount.findUnique({
+                where: { id: socialAccountId }
+            });
+
+            if (!account) {
+                log.error("Social account not found for publishing");
+                throw new Error("Social account not found");
+            }
+
+            // Decrypt the token for usage
+            const accessToken = await getSocialToken(socialAccountId);
+
+            log.info({ profileName: account.profileName }, "Publishing to Instagram");
 
             const permalink = await publishToInstagram(
                 render.outputUrl,
@@ -40,11 +43,11 @@ export const publishWorker = new Worker(
                 account.platformId
             );
 
-            console.log(`✅ Published! URL: ${permalink}`);
+            log.info({ permalink }, "Content published successfully to Instagram");
 
             return { success: true, permalink };
         } catch (error) {
-            console.error(`❌ Publishing failed:`, error);
+            log.error({ err: error }, "Publishing job failed");
             throw error;
         }
     },
