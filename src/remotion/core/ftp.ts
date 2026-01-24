@@ -1,9 +1,9 @@
 import PromiseFtp from "promise-ftp";
 import fs from "fs";
-import { env } from "./config.js";
-import logger from "./logger.js";
+import { env } from "./config";
+import logger from "./logger";
 
-export async function uploadToFtp(localPath) {
+export async function uploadToFtp(localPath: string) {
   const ftp = new PromiseFtp();
   const fileName = `video-${Date.now()}.mp4`;
 
@@ -24,7 +24,7 @@ export async function uploadToFtp(localPath) {
     for (const folder of folders) {
       try {
         await ftp.cwd(folder);
-      } catch (err) {
+      } catch (err: any) {
         // Folder likely doesn't exist, try to create it
         await ftp.mkdir(folder);
         await ftp.cwd(folder);
@@ -37,7 +37,7 @@ export async function uploadToFtp(localPath) {
 
     const publicUrl = `${env.PUBLIC_VIDEO_BASE_URL}/${fileName}`;
     return publicUrl;
-  } catch (err) {
+  } catch (err: any) {
     logger.error({ err }, "FTP upload failed");
     if (ftp.getConnectionStatus() !== "disconnected") {
       await ftp.end();

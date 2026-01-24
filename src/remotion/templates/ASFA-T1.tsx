@@ -11,7 +11,7 @@ import {
 } from "remotion";
 import { loadFont as loadFraunces } from "@remotion/google-fonts/Fraunces";
 import { loadFont as loadRaleway } from "@remotion/google-fonts/Raleway";
-import { calculateSequenceDuration, TAIL_FRAMES } from "../core/timing.js";
+import { calculateSequenceDuration, TAIL_FRAMES } from "../core/timing";
 
 const { fontFamily: frauncesFamily } = loadFraunces("normal", {
   weights: ["700"],
@@ -24,7 +24,17 @@ const { fontFamily: ralewayFamily } = loadRaleway("normal", {
   ignoreTooManyRequestsWarning: true,
 });
 
-const SimpleText = ({
+interface SimpleTextProps {
+  text: string;
+  duration: number;
+  noFadeIn?: boolean;
+  fontFamily: string;
+  fontWeight?: string | number;
+  letterSpacing?: string;
+  typewriter?: boolean;
+}
+
+const SimpleText: React.FC<SimpleTextProps> = ({
   text,
   duration,
   noFadeIn = false,
@@ -39,10 +49,10 @@ const SimpleText = ({
   const typingDuration = Math.min(30, duration - 20);
   const charsToShow = typewriter
     ? Math.floor(
-        interpolate(frame, [0, typingDuration], [0, text.length], {
-          extrapolateRight: "clamp",
-        }),
-      )
+      interpolate(frame, [0, typingDuration], [0, text.length], {
+        extrapolateRight: "clamp",
+      }),
+    )
     : text.length;
 
   // Opacity timing logic
@@ -97,7 +107,22 @@ const SimpleText = ({
   );
 };
 
-export const ASFAT1 = ({
+interface ASFAT1Props {
+  sequences: {
+    hook: string;
+    problem: string;
+    solution: string;
+    cta: string;
+  };
+  videoIndex1?: number;
+  videoIndex2?: number;
+  video1Duration?: number;
+  video2Duration?: number;
+  musicIndex?: number;
+  r2BaseUrl?: string;
+}
+
+export const ASFAT1: React.FC<ASFAT1Props> = ({
   sequences,
   videoIndex1 = 1,
   videoIndex2 = 2,
@@ -123,7 +148,7 @@ export const ASFAT1 = ({
   const fill2 = durationInFrames - t2;
 
   // Helper to pad numbers to 4 digits
-  const pad = (n) => String(n).padStart(4, "0");
+  const pad = (n: number | string) => String(n).padStart(4, "0");
 
   // Background Videos from R2 (with local fallback)
   const bg1 = r2BaseUrl
@@ -140,7 +165,7 @@ export const ASFAT1 = ({
     : staticFile(`background_music/astro-background-music-${musicIndex}.mp3`);
 
   // Simple conditional loop component
-  const SmartVideo = ({ src, videoDuration, fillDuration }) => {
+  const SmartVideo: React.FC<{ src: string; videoDuration: number; fillDuration: number }> = ({ src, videoDuration, fillDuration }) => {
     const vDuration = Math.round(videoDuration);
     const fDuration = Math.round(fillDuration);
 

@@ -1,13 +1,13 @@
 import axios from "axios";
-import { env } from "./config.js";
-import logger from "./logger.js";
+import { env } from "./config";
+import logger from "./logger";
 
 const AIRTABLE_API_URL = "https://api.airtable.com/v0";
 
 /**
  * Fetches the first record with status 'Approved' from Airtable for a specific template
  */
-export async function fetchApprovedRecord(templateId, tableId) {
+export async function fetchApprovedRecord(templateId: string, tableId: string) {
   const url = `${AIRTABLE_API_URL}/${env.AIRTABLE_BASE_ID}/${tableId}`;
 
   try {
@@ -34,22 +34,22 @@ export async function fetchApprovedRecord(templateId, tableId) {
     const sequences =
       templateId === "asfa-t1"
         ? {
-            hook: record.fields.text_1_hook,
-            problem: record.fields.text_2_problem,
-            solution: record.fields.text_3_solution,
-            cta: record.fields.text_4_action,
-          }
+          hook: record.fields.text_1_hook,
+          problem: record.fields.text_2_problem,
+          solution: record.fields.text_3_solution,
+          cta: record.fields.text_4_action,
+        }
         : {
-            hook: record.fields.text_1_hook,
-            message: record.fields.text_2_message,
-          };
+          hook: record.fields.text_1_hook,
+          message: record.fields.text_2_message,
+        };
 
     return {
       id: record.id,
       sequences,
       caption: record.fields.caption,
     };
-  } catch (error) {
+  } catch (error: any) {
     logger.error(
       { err: error.response?.data || error.message, templateId },
       "Failed to fetch from Airtable",
@@ -61,7 +61,7 @@ export async function fetchApprovedRecord(templateId, tableId) {
 /**
  * Updates a record status to 'Processed'
  */
-export async function updateRecordToProcessed(recordId, tableId) {
+export async function updateRecordToProcessed(recordId: string, tableId: string) {
   const url = `${AIRTABLE_API_URL}/${env.AIRTABLE_BASE_ID}/${tableId}`;
 
   try {
@@ -89,7 +89,7 @@ export async function updateRecordToProcessed(recordId, tableId) {
       },
     );
     logger.info({ recordId }, "Airtable record updated successfully.");
-  } catch (error) {
+  } catch (error: any) {
     logger.error(
       { err: error.response?.data || error.message },
       "Failed to update Airtable record",

@@ -11,7 +11,7 @@ import {
 } from "remotion";
 import { loadFont as loadFraunces } from "@remotion/google-fonts/Fraunces";
 import { loadFont as loadRaleway } from "@remotion/google-fonts/Raleway";
-import { calculateSequenceDuration, TAIL_FRAMES } from "../core/timing.js";
+import { calculateSequenceDuration, TAIL_FRAMES } from "../core/timing";
 
 const { fontFamily: frauncesFamily } = loadFraunces("normal", {
   weights: ["700"],
@@ -24,7 +24,17 @@ const { fontFamily: ralewayFamily } = loadRaleway("normal", {
   ignoreTooManyRequestsWarning: true,
 });
 
-const SimpleText = ({
+interface SimpleTextProps {
+  text: string;
+  duration: number;
+  noFadeIn?: boolean;
+  fontFamily: string;
+  fontWeight?: string | number;
+  letterSpacing?: string;
+  children?: React.ReactNode;
+}
+
+const SimpleText: React.FC<SimpleTextProps> = ({
   text,
   duration,
   noFadeIn = false,
@@ -91,11 +101,11 @@ const SimpleText = ({
   );
 };
 
-const DynamicMessage = ({ text, duration }) => {
+const DynamicMessage: React.FC<{ text: string; duration: number }> = ({ text, duration }) => {
   const frame = useCurrentFrame();
 
   // Granular dynamic font sizing to fit the container accurately across lengths
-  const getFontSize = (len) => {
+  const getFontSize = (len: number) => {
     if (len < 40) return "95px";
     if (len < 80) return "85px";
     if (len < 120) return "75px";
@@ -152,7 +162,20 @@ const DynamicMessage = ({ text, duration }) => {
   );
 };
 
-export const ASFAT2 = ({
+interface ASFAT2Props {
+  sequences: {
+    hook: string;
+    message: string;
+  };
+  videoIndex1?: number;
+  videoIndex2?: number;
+  video1Duration?: number;
+  video2Duration?: number;
+  musicIndex?: number;
+  r2BaseUrl?: string;
+}
+
+export const ASFAT2: React.FC<ASFAT2Props> = ({
   sequences,
   videoIndex1 = 1,
   videoIndex2 = 2,
@@ -169,7 +192,7 @@ export const ASFAT2 = ({
   const messageDuration = durationInFrames - hookDuration;
 
   // Helper to pad numbers to 4 digits
-  const pad = (n) => String(n).padStart(4, "0");
+  const pad = (n: number | string) => String(n).padStart(4, "0");
 
   const bg1 = r2BaseUrl
     ? `${r2BaseUrl}/astrologia_familiar/videos/ASFA_VID_${pad(videoIndex1)}.mp4`
@@ -184,7 +207,7 @@ export const ASFAT2 = ({
     : staticFile(`background_music/astro-background-music-${musicIndex}.mp3`);
 
   // Simple conditional loop component
-  const SmartVideo = ({ src, videoDuration, fillDuration }) => {
+  const SmartVideo: React.FC<{ src: string; videoDuration: number; fillDuration: number }> = ({ src, videoDuration, fillDuration }) => {
     const vDuration = Math.round(videoDuration);
     const fDuration = Math.round(fillDuration);
 

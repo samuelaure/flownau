@@ -1,6 +1,6 @@
 import { exec } from "child_process";
 import { promisify } from "util";
-import logger from "./logger.js";
+import logger from "./logger";
 
 const execAsync = promisify(exec);
 
@@ -10,7 +10,7 @@ const execAsync = promisify(exec);
  * @param {string} source Path or URL
  * @returns {Promise<number>} Duration in frames (at 30fps)
  */
-export async function getVideoDuration(source) {
+export async function getVideoDuration(source: string) {
   try {
     // ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 [source]
     const { stdout } = await execAsync(
@@ -23,7 +23,7 @@ export async function getVideoDuration(source) {
     }
 
     return Math.floor(durationInSeconds * 30);
-  } catch (error) {
+  } catch (error: any) {
     logger.warn(
       { source, err: error.message },
       "Failed to fetch duration via ffprobe. Using 15s fallback.",

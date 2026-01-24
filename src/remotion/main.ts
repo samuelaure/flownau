@@ -5,19 +5,19 @@ import { renderMedia, selectComposition } from "@remotion/renderer";
 import {
   fetchApprovedRecord,
   updateRecordToProcessed,
-} from "./core/airtable.js";
-import { uploadToR2 } from "./core/s3.js";
-import { publishToInstagram } from "./core/instagram.js";
-import { notifyTelegram } from "./core/telegram.js";
-import { calculateTotalFrames } from "./core/timing.js";
-import { getVideoDuration } from "./core/metadata.js";
-import { env } from "./core/config.js";
-import logger from "./core/logger.js";
+} from "./core/airtable";
+import { uploadToR2 } from "./core/s3";
+import { publishToInstagram } from "./core/instagram";
+import { notifyTelegram } from "./core/telegram";
+import { calculateTotalFrames } from "./core/timing";
+import { getVideoDuration } from "./core/metadata";
+import { env } from "./core/config";
+import logger from "./core/logger";
 
 const run = async () => {
   // 0. Configuration Mapping
   const templateArg = (process.argv[2] || "asfa-t1").replace(/^--/, "");
-  const configs = {
+  const configs: Record<string, { id: string; tableId: string }> = {
     "asfa-t1": {
       id: "asfa-t1",
       tableId: env.AIRTABLE_ASFA_T1_TABLE_ID,
@@ -35,7 +35,7 @@ const run = async () => {
     process.exit(1);
   }
 
-  const entry = path.resolve("src/index.js");
+  const entry = path.resolve("src/remotion/index.ts");
   const outputLocation = path.resolve("out/video.mp4");
 
   logger.info(
@@ -73,13 +73,13 @@ const run = async () => {
     }
 
     // 2. Random Background & Music Selection
-    const selectRandom = (max) => Math.floor(Math.random() * max) + 1;
+    const selectRandom = (max: number) => Math.floor(Math.random() * max) + 1;
     const videoIndex1 = selectRandom(28);
     let videoIndex2 = selectRandom(28);
     while (videoIndex2 === videoIndex1) videoIndex2 = selectRandom(28);
     const musicIndex = selectRandom(10);
 
-    const pad = (n) => String(n).padStart(4, "0");
+    const pad = (n: number | string) => String(n).padStart(4, "0");
     const vid1Name = `ASFA_VID_${pad(videoIndex1)}`;
     const vid2Name = `ASFA_VID_${pad(videoIndex2)}`;
     const audName = `ASFA_AUD_${pad(musicIndex)}`;
@@ -165,7 +165,7 @@ const run = async () => {
       `✅ <b>Astromatic:</b> Cycle completed for <b>${activeConfig.id}</b>!\n\n🎬 <b>Assets:</b>\n- Video 1: <code>${vid1Name}</code>\n- Video 2: <code>${vid2Name}</code>\n- Music: <code>${audName}</code>\n\n🔗 <a href="${postLink}">View on Instagram</a>`,
     );
     logger.info("✅ Automation cycle finished.");
-  } catch (error) {
+  } catch (error: any) {
     logger.error({ err: error }, "Critical failure in automation pipeline");
     await notifyTelegram(`❌ <b>Astromatic Error:</b>\n${error.message}`);
     process.exit(1);

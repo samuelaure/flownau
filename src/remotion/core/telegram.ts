@@ -1,8 +1,8 @@
 import axios from "axios";
-import { env } from "./config.js";
-import logger from "./logger.js";
+import { env } from "./config";
+import logger from "./logger";
 
-export async function notifyTelegram(message) {
+export async function notifyTelegram(message: string) {
   const { TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID } = env;
   if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
     logger.debug(
@@ -21,7 +21,7 @@ export async function notifyTelegram(message) {
       },
     );
     logger.debug("Telegram notification sent.");
-  } catch (err) {
+  } catch (err: any) {
     logger.error({ err: err.message }, "Telegram notification failed");
   }
 }

@@ -1,8 +1,8 @@
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import fs from "fs";
 import path from "path";
-import { env } from "./config.js";
-import logger from "./logger.js";
+import { env } from "./config";
+import logger from "./logger";
 
 const s3Client = new S3Client({
   region: "auto",
@@ -19,7 +19,7 @@ const s3Client = new S3Client({
  * @param {string} [remoteFileName] - Optional custom name for the remote file
  * @returns {Promise<string>} - The public URL of the uploaded file
  */
-export const uploadToR2 = async (localFilePath, remoteFileName = null) => {
+export const uploadToR2 = async (localFilePath: string, remoteFileName: string | null = null) => {
   const fileName = remoteFileName || path.basename(localFilePath);
   const fileStream = fs.createReadStream(localFilePath);
   const fileStats = fs.statSync(localFilePath);
@@ -48,7 +48,7 @@ export const uploadToR2 = async (localFilePath, remoteFileName = null) => {
     const publicUrl = `${baseUrl}${fileName}`;
     logger.info({ publicUrl }, "File uploaded successfully to R2");
     return publicUrl;
-  } catch (error) {
+  } catch (error: any) {
     logger.error({ err: error }, "Failed to upload file to R2");
     throw error;
   }
