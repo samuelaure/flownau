@@ -16,6 +16,7 @@ interface AssetEntry {
   size: number;
   counter: number;
   uploaded_at: string;
+  deleted_at?: string;
   status: string;
 }
 
