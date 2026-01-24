@@ -1,31 +1,28 @@
 import type { NextAuthConfig } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
-import prisma from "@/lib/prisma";
 
+// Notice this file has NO node-only imports (no prisma, no bcrypt)
 export default {
-    providers: [
-        Credentials({
-            async authorize(credentials) {
-                const { email, password } = credentials;
+    providers: [], // Providers are added in auth.ts to keep this edge-compatible
+    pages: {
+        signIn: "/login",
+    },
+    callbacks: {
+        authorized({ auth, request: { nextUrl } }) {
+            const isLoggedIn = !!auth?.user;
+            const isApiRoute = nextUrl.pathname.startsWith("/api");
+            const isAuthRoute = nextUrl.pathname.startsWith("/login") || nextUrl.pathname.startsWith("/register");
+            const isPublicRoute = nextUrl.pathname === "/login"; // Add more as needed
 
-                if (!email || !password) return null;
+            if (isApiRoute) return true;
 
-                const user = await prisma.user.findUnique({
-                    where: { email: email as string },
-                });
+            if (isAuthRoute) {
+                if (isLoggedIn) {
+                    return Response.redirect(new URL("/", nextUrl));
+                }
+                return true;
+            }
 
-                if (!user || !user.password) return null;
-
-                const passwordsMatch = await bcrypt.compare(
-                    password as string,
-                    user.password
-                );
-
-                if (passwordsMatch) return user;
-
-                return null;
-            },
-        }),
-    ],
+            return isLoggedIn;
+        },
+    },
 } satisfies NextAuthConfig;
