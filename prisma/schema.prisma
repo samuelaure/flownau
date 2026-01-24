@@ -107,6 +107,7 @@ model Project {
   workspace      Workspace @relation(fields: [workspaceId], references: [id])
   
   assets         Asset[]
+  renders        Render[]
 
   @@unique([workspaceId, shortCode])
 }
