@@ -7,23 +7,50 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// --- Auth & Users ---
+
 model User {
-  id             String    @id @default(cuid())
-  email          String    @unique
-  name           String?
-  role           Role      @default(USER)
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  
-  projects       Project[]
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  workspaces    WorkspaceMember[]
 }
+
+model Workspace {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  projects    Project[]
+  members     WorkspaceMember[]
+  socialAccounts SocialAccount[]
+}
+
+model WorkspaceMember {
+  id          String    @id @default(cuid())
+  workspaceId String
+  userId      String
+  role        WorkspaceRole @default(MEMBER)
+  
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
+
+  @@unique([workspaceId, userId])
+}
+
+// --- Core Entities ---
 
 model Project {
   id             String    @id @default(cuid())
   name           String
-  shortCode      String    @unique // e.g., "ASFA"
-  
   description    String?
+  shortCode      String    // e.g., "ASFA" (Unique per workspace ideally)
   
   // Counters for Butler naming convention
   videoCounter   Int       @default(0)
@@ -32,10 +59,12 @@ model Project {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   
-  userId         String
-  user           User      @relation(fields: [userId], references: [id])
+  workspaceId    String
+  workspace      Workspace @relation(fields: [workspaceId], references: [id])
   
   assets         Asset[]
+
+  @@unique([workspaceId, shortCode])
 }
 
 model Asset {
@@ -44,10 +73,10 @@ model Asset {
   type             AssetType
   systemFilename   String    // e.g., "ASFA_VID_0001.mp4"
   originalFilename String
-  hash             String    // SHA-256 for deduplication
+  hash             String    // SHA-256
   
-  r2Key            String    // "project/videos/filename.mp4"
-  r2Url            String?   // Public URL if needed
+  r2Key            String    // "workspace/project/videos/filename.mp4"
+  r2Url            String?   
   
   sizeBytes        BigInt
   mimeType         String?
@@ -62,13 +91,45 @@ model Asset {
   projectId        String
   project          Project   @relation(fields: [projectId], references: [id])
 
-  @@unique([projectId, hash]) // Prevent duplicates within a project
+  @@unique([projectId, hash])
   @@index([systemFilename])
 }
+
+// --- Social & Publishing ---
+
+model SocialAccount {
+  id             String        @id @default(cuid())
+  platform       SocialPlatform
+  profileName    String        // e.g. "astrologiafamiliar"
+  platformId     String        // e.g. IG Business ID
+  
+  // Security: Tokens are stored encrypted
+  accessToken    String        // Encrypted
+  tokenExpiresAt DateTime?
+  
+  refreshToken   String?       // Encrypted
+  
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  
+  workspaceId    String
+  workspace      Workspace     @relation(fields: [workspaceId], references: [id])
+
+  @@unique([workspaceId, platform, platformId])
+}
+
+// --- Enums ---
 
 enum Role {
   USER
   ADMIN
+}
+
+enum WorkspaceRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
 }
 
 enum AssetType {
@@ -81,4 +142,10 @@ enum AssetStatus {
   ACTIVE
   ARCHIVED
   DELETED
+}
+
+enum SocialPlatform {
+  INSTAGRAM
+  TIKTOK
+  YOUTUBE
 }
