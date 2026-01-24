@@ -1,6 +1,6 @@
 {
   "name": "flownau",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "private": true,
   "author": "Samuel Aure",
   "description": "Unified platform merging Astromatic and R2 Media Butler",
@@ -47,6 +47,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/fluent-ffmpeg": "^2.1.26",
     "@types/inquirer": "^9.0.7",
+    "@types/ioredis": "^4.28.10",
     "@types/node": "^20.16.11",
     "@types/pg": "^8.16.0",
     "@types/react": "^18.3.11",

@@ -2,7 +2,7 @@ import axios from "axios";
 import { env } from "./config";
 import logger from "./logger";
 
-async function waitForMediaProcessing(containerId: string, maxRetries = 10) {
+async function waitForMediaProcessing(containerId: string, token: string, maxRetries = 10) {
   for (let i = 0; i < maxRetries; i++) {
     logger.info(
       `Checking media processing status (attempt ${i + 1}/${maxRetries})...`,
@@ -12,7 +12,7 @@ async function waitForMediaProcessing(containerId: string, maxRetries = 10) {
       {
         params: {
           fields: "status_code,status",
-          access_token: env.IG_TOKEN,
+          access_token: token,
         },
       },
     );
@@ -33,21 +33,27 @@ async function waitForMediaProcessing(containerId: string, maxRetries = 10) {
   throw new Error("Media processing timed out.");
 }
 
-export async function publishToInstagram(videoUrl: string, caption: string) {
-  const { IG_TOKEN, IG_USER_ID } = env;
+export async function publishToInstagram(
+  videoUrl: string,
+  caption: string,
+  targetToken?: string,
+  targetUserId?: string
+) {
+  const token = targetToken || env.IG_TOKEN;
+  const userId = targetUserId || env.IG_USER_ID;
 
   try {
     // 1. Create Media Container
     logger.info("Creating Instagram media container...");
     const container = await axios.post(
-      `https://graph.facebook.com/v24.0/${IG_USER_ID}/media`,
+      `https://graph.facebook.com/v24.0/${userId}/media`,
       null,
       {
         params: {
           media_type: "REELS",
           video_url: videoUrl,
           caption: caption,
-          access_token: IG_TOKEN,
+          access_token: token,
         },
       },
     );
@@ -56,17 +62,17 @@ export async function publishToInstagram(videoUrl: string, caption: string) {
     logger.info({ creationId }, "Container created. Waiting for processing...");
 
     // 2. Wait for processing (Polling)
-    await waitForMediaProcessing(creationId);
+    await waitForMediaProcessing(creationId, token);
 
     // 3. Publish
     logger.info("Publishing media...");
     const publishResponse = await axios.post(
-      `https://graph.facebook.com/v24.0/${IG_USER_ID}/media_publish`,
+      `https://graph.facebook.com/v24.0/${userId}/media_publish`,
       null,
       {
         params: {
           creation_id: creationId,
-          access_token: IG_TOKEN,
+          access_token: token,
         },
       },
     );
@@ -80,7 +86,7 @@ export async function publishToInstagram(videoUrl: string, caption: string) {
       {
         params: {
           fields: "permalink",
-          access_token: IG_TOKEN,
+          access_token: token,
         },
       },
     );
