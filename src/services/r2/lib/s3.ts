@@ -1,7 +1,7 @@
 import { S3Client } from '@aws-sdk/client-s3';
-import { config } from './config.js';
+import { config } from './config';
 
-let client = null;
+let client: S3Client | null = null;
 
 export function getS3Client() {
   if (client) return client;
@@ -10,8 +10,8 @@ export function getS3Client() {
     region: 'auto',
     endpoint: config.r2.endpoint,
     credentials: {
-      accessKeyId: config.r2.accessKeyId,
-      secretAccessKey: config.r2.secretAccessKey,
+      accessKeyId: config.r2.accessKeyId as string,
+      secretAccessKey: config.r2.secretAccessKey as string,
     },
   });
 
