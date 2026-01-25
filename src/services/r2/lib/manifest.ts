@@ -36,7 +36,11 @@ export async function getProjectConfig(db: { data: ManifestData }, projectName: 
   return db.data.projectConfig[projectName] || null;
 }
 
-export async function setProjectConfig(db: { data: ManifestData; write: () => Promise<void> }, projectName: string, configData: any) {
+export async function setProjectConfig(
+  db: { data: ManifestData; write: () => Promise<void> },
+  projectName: string,
+  configData: any
+) {
   db.data.projectConfig[projectName] = {
     shortCode: configData.shortCode.toUpperCase(),
     videoCounter: configData.videoCounter || 0,

@@ -13,7 +13,7 @@ export function calculateSequenceDuration(text: string) {
 
 export function calculateTotalFrames(sequences: Record<string, any>) {
   const contentDuration = Object.values(sequences).reduce((acc: number, text: any) => {
-    if (typeof text !== "string") return acc;
+    if (typeof text !== 'string') return acc;
     return acc + calculateSequenceDuration(text);
   }, 0);
   return contentDuration + TAIL_FRAMES;

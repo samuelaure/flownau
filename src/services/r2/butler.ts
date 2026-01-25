@@ -113,7 +113,9 @@ program
 
       const absoluteDir = pathModule.resolve(dir);
       const files = await fsPromises.readdir(absoluteDir);
-      const mediaFiles = files.filter((f: string) => VIDEO_EXTENSIONS.test(f) || AUDIO_EXTENSIONS.test(f));
+      const mediaFiles = files.filter(
+        (f: string) => VIDEO_EXTENSIONS.test(f) || AUDIO_EXTENSIONS.test(f)
+      );
 
       if (mediaFiles.length === 0) {
         console.log('No video or audio files found in directory.');
@@ -273,7 +275,12 @@ program
               asset.deleted_at = new Date().toISOString();
               count++;
             } catch (error) {
-              console.error('Failed to delete ' + (asset as any).system_filename + ': ' + (error as Error).message);
+              console.error(
+                'Failed to delete ' +
+                  (asset as any).system_filename +
+                  ': ' +
+                  (error as Error).message
+              );
             }
           } else {
             count++;

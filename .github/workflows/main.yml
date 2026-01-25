@@ -51,22 +51,22 @@ jobs:
           AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
           AIRTABLE_ASFA_T1_TABLE_ID: ${{ secrets.AIRTABLE_ASFA_T1_TABLE_ID }}
           AIRTABLE_ASFA_T2_TABLE_ID: ${{ secrets.AIRTABLE_ASFA_T2_TABLE_ID }}
-          
+
           # Cloudflare R2
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
           R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
           R2_PUBLIC_URL: ${{ secrets.R2_PUBLIC_URL }}
-          
+
           # Instagram
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
-          
+
           # Telegram (Notifications)
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          
+
           # Environment
           NODE_ENV: production
         run: node src/main.js asfa-t1
@@ -105,22 +105,22 @@ jobs:
           AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
           AIRTABLE_ASFA_T1_TABLE_ID: ${{ secrets.AIRTABLE_ASFA_T1_TABLE_ID }}
           AIRTABLE_ASFA_T2_TABLE_ID: ${{ secrets.AIRTABLE_ASFA_T2_TABLE_ID }}
-          
+
           # Cloudflare R2
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
           R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
           R2_PUBLIC_URL: ${{ secrets.R2_PUBLIC_URL }}
-          
+
           # Instagram
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
-          
+
           # Telegram (Notifications)
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          
+
           # Environment
           NODE_ENV: production
         run: node src/main.js asfa-t2

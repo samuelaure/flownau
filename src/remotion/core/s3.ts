@@ -1,11 +1,11 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-import fs from "fs";
-import path from "path";
-import { env } from "./config";
-import logger from "./logger";
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import fs from 'fs';
+import path from 'path';
+import { env } from './config';
+import logger from './logger';
 
 const s3Client = new S3Client({
-  region: "auto",
+  region: 'auto',
   endpoint: env.R2_ENDPOINT,
   credentials: {
     accessKeyId: env.R2_ACCESS_KEY_ID,
@@ -29,27 +29,22 @@ export const uploadToR2 = async (localFilePath: string, remoteFileName: string |
     Key: fileName,
     Body: fileStream,
     ContentLength: fileStats.size,
-    ContentType: "video/mp4", // Assuming mp4 for our reels
+    ContentType: 'video/mp4', // Assuming mp4 for our reels
   });
 
   try {
-    logger.info(
-      { bucket: env.R2_BUCKET_NAME, key: fileName },
-      "Uploading file to R2...",
-    );
+    logger.info({ bucket: env.R2_BUCKET_NAME, key: fileName }, 'Uploading file to R2...');
     await s3Client.send(command);
 
     // Construct the public URL
     // Ensure public URL has a trailing slash or handle joining properly
-    const baseUrl = env.R2_PUBLIC_URL.endsWith("/")
-      ? env.R2_PUBLIC_URL
-      : `${env.R2_PUBLIC_URL}/`;
+    const baseUrl = env.R2_PUBLIC_URL.endsWith('/') ? env.R2_PUBLIC_URL : `${env.R2_PUBLIC_URL}/`;
 
     const publicUrl = `${baseUrl}${fileName}`;
-    logger.info({ publicUrl }, "File uploaded successfully to R2");
+    logger.info({ publicUrl }, 'File uploaded successfully to R2');
     return publicUrl;
   } catch (error: any) {
-    logger.error({ err: error }, "Failed to upload file to R2");
+    logger.error({ err: error }, 'Failed to upload file to R2');
     throw error;
   }
 };

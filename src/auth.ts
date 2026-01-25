@@ -1,45 +1,43 @@
-import NextAuth from "next-auth";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import prisma from "@/lib/prisma";
-import authConfig from "@/auth.config";
-import Credentials from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
+import NextAuth from 'next-auth';
+import { PrismaAdapter } from '@auth/prisma-adapter';
+import prisma from '@/lib/prisma';
+import authConfig from '@/auth.config';
+import Credentials from 'next-auth/providers/credentials';
+import bcrypt from 'bcryptjs';
 
 export const {
-    handlers: { GET, POST },
-    auth,
-    signIn,
-    signOut
+  handlers: { GET, POST },
+  auth,
+  signIn,
+  signOut,
 } = NextAuth({
-    adapter: PrismaAdapter(prisma),
-    session: { strategy: "jwt" },
-    ...authConfig,
-    providers: [
-        Credentials({
-            async authorize(credentials) {
-                const { email, password } = credentials;
+  adapter: PrismaAdapter(prisma),
+  session: { strategy: 'jwt' },
+  ...authConfig,
+  providers: [
+    Credentials({
+      async authorize(credentials) {
+        const { email, password } = credentials;
 
-                if (!email || !password) return null;
+        if (!email || !password) return null;
 
-                const user = await prisma.user.findUnique({
-                    where: { email: email as string },
-                });
+        const user = await prisma.user.findUnique({
+          where: { email: email as string },
+        });
 
-                if (!user || !user.password) return null;
+        if (!user || !user.password) return null;
 
-                const passwordsMatch = await bcrypt.compare(
-                    password as string,
-                    user.password
-                );
+        const passwordsMatch = await bcrypt.compare(password as string, user.password);
 
-                if (passwordsMatch) return {
-                    id: user.id,
-                    email: user.email,
-                    name: user.name,
-                };
+        if (passwordsMatch)
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+          };
 
-                return null;
-            },
-        }),
-    ],
+        return null;
+      },
+    }),
+  ],
 });

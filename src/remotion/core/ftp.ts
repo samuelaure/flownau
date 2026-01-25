@@ -1,7 +1,7 @@
-import PromiseFtp from "promise-ftp";
-import fs from "fs";
-import { env } from "./config";
-import logger from "./logger";
+import PromiseFtp from 'promise-ftp';
+import fs from 'fs';
+import { env } from './config';
+import logger from './logger';
 
 export async function uploadToFtp(localPath: string) {
   const ftp = new PromiseFtp();
@@ -9,7 +9,7 @@ export async function uploadToFtp(localPath: string) {
 
   logger.debug(
     { host: env.FTP_HOST, user: env.FTP_USER, remotePath: env.FTP_REMOTE_PATH },
-    "Connecting to FTP and preparing remote directory...",
+    'Connecting to FTP and preparing remote directory...'
   );
 
   try {
@@ -20,7 +20,7 @@ export async function uploadToFtp(localPath: string) {
     });
 
     // Ensure remote directory exists
-    const folders = env.FTP_REMOTE_PATH.split("/").filter((f) => f);
+    const folders = env.FTP_REMOTE_PATH.split('/').filter((f) => f);
     for (const folder of folders) {
       try {
         await ftp.cwd(folder);
@@ -38,8 +38,8 @@ export async function uploadToFtp(localPath: string) {
     const publicUrl = `${env.PUBLIC_VIDEO_BASE_URL}/${fileName}`;
     return publicUrl;
   } catch (err: any) {
-    logger.error({ err }, "FTP upload failed");
-    if (ftp.getConnectionStatus() !== "disconnected") {
+    logger.error({ err }, 'FTP upload failed');
+    if (ftp.getConnectionStatus() !== 'disconnected') {
       await ftp.end();
     }
     throw err;

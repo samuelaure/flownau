@@ -1,5 +1,5 @@
-import { z } from "zod";
-import dotenv from "dotenv";
+import { z } from 'zod';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -15,20 +15,20 @@ const envSchema = z.object({
   FTP_HOST: z.string().optional(),
   FTP_USER: z.string().optional(),
   FTP_PASSWORD: z.string().optional(),
-  FTP_REMOTE_PATH: z.string().default("public_html/ig/astrologia_familiar"),
+  FTP_REMOTE_PATH: z.string().default('public_html/ig/astrologia_familiar'),
   PUBLIC_VIDEO_BASE_URL: z.string().url().optional(),
 
   // Airtable
   AIRTABLE_TOKEN: z.string(),
   AIRTABLE_BASE_ID: z
-    .preprocess((val) => (val === "" ? undefined : val), z.string())
-    .default("appEVPrTtF1XyAQ4h"),
+    .preprocess((val) => (val === '' ? undefined : val), z.string())
+    .default('appEVPrTtF1XyAQ4h'),
   AIRTABLE_ASFA_T1_TABLE_ID: z
-    .preprocess((val) => (val === "" ? undefined : val), z.string())
-    .default("tblC7lVTkY0ftzNoS"),
+    .preprocess((val) => (val === '' ? undefined : val), z.string())
+    .default('tblC7lVTkY0ftzNoS'),
   AIRTABLE_ASFA_T2_TABLE_ID: z
-    .preprocess((val) => (val === "" ? undefined : val), z.string())
-    .default("tblkTYpwfm3aLzKER"),
+    .preprocess((val) => (val === '' ? undefined : val), z.string())
+    .default('tblkTYpwfm3aLzKER'),
 
   // Instagram
   IG_TOKEN: z.string(),
@@ -41,16 +41,16 @@ const envSchema = z.object({
   // Environment
   NODE_ENV: z
     .preprocess(
-      (val) => (val === "" ? undefined : val),
-      z.enum(["development", "production", "test"]),
+      (val) => (val === '' ? undefined : val),
+      z.enum(['development', 'production', 'test'])
     )
-    .default("development"),
+    .default('development'),
 });
 
 const _env = envSchema.safeParse(process.env);
 
 if (!_env.success) {
-  console.error("❌ Invalid environment variables:", _env.error.format());
+  console.error('❌ Invalid environment variables:', _env.error.format());
   process.exit(1);
 }
 

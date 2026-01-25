@@ -8,19 +8,19 @@ import {
   useVideoConfig,
   Loop,
   Audio,
-} from "remotion";
-import { loadFont as loadFraunces } from "@remotion/google-fonts/Fraunces";
-import { loadFont as loadRaleway } from "@remotion/google-fonts/Raleway";
-import { calculateSequenceDuration, TAIL_FRAMES } from "../core/timing";
+} from 'remotion';
+import { loadFont as loadFraunces } from '@remotion/google-fonts/Fraunces';
+import { loadFont as loadRaleway } from '@remotion/google-fonts/Raleway';
+import { calculateSequenceDuration, TAIL_FRAMES } from '../core/timing';
 
-const { fontFamily: frauncesFamily } = loadFraunces("normal", {
-  weights: ["700"],
-  subsets: ["latin"],
+const { fontFamily: frauncesFamily } = loadFraunces('normal', {
+  weights: ['700'],
+  subsets: ['latin'],
   ignoreTooManyRequestsWarning: true,
 });
-const { fontFamily: ralewayFamily } = loadRaleway("normal", {
-  weights: ["400"],
-  subsets: ["latin"],
+const { fontFamily: ralewayFamily } = loadRaleway('normal', {
+  weights: ['400'],
+  subsets: ['latin'],
   ignoreTooManyRequestsWarning: true,
 });
 
@@ -39,8 +39,8 @@ const SimpleText: React.FC<SimpleTextProps> = ({
   duration,
   noFadeIn = false,
   fontFamily,
-  fontWeight = "400",
-  letterSpacing = "normal",
+  fontWeight = '400',
+  letterSpacing = 'normal',
   typewriter = false,
 }) => {
   const frame = useCurrentFrame();
@@ -49,10 +49,10 @@ const SimpleText: React.FC<SimpleTextProps> = ({
   const typingDuration = Math.min(30, duration - 20);
   const charsToShow = typewriter
     ? Math.floor(
-      interpolate(frame, [0, typingDuration], [0, text.length], {
-        extrapolateRight: "clamp",
-      }),
-    )
+        interpolate(frame, [0, typingDuration], [0, text.length], {
+          extrapolateRight: 'clamp',
+        })
+      )
     : text.length;
 
   // Opacity timing logic
@@ -66,33 +66,33 @@ const SimpleText: React.FC<SimpleTextProps> = ({
       ? [0, Math.max(0.1, duration - 10), duration]
       : [0, 10, Math.max(10.1, duration - 10), duration],
     hasInstantStart ? [1, 1, 0] : [0, 1, 1, 0],
-    { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
+    { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
   );
 
   return (
     <AbsoluteFill
       style={{
         opacity,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        textAlign: "center",
-        padding: "200px 140px 300px 140px",
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        padding: '200px 140px 300px 140px',
       }}
     >
       <h1
         style={{
           fontFamily,
-          fontSize: "70px",
-          color: "white",
+          fontSize: '70px',
+          color: 'white',
           fontWeight,
-          lineHeight: "1.2",
-          textShadow: "0px 4px 10px rgba(0,0,0,0.5)",
+          lineHeight: '1.2',
+          textShadow: '0px 4px 10px rgba(0,0,0,0.5)',
           margin: 0,
           letterSpacing,
         }}
       >
-        {text.split("").map((char, i) => (
+        {text.split('').map((char, i) => (
           <span
             key={i}
             style={{
@@ -129,7 +129,7 @@ export const ASFAT1: React.FC<ASFAT1Props> = ({
   video1Duration = 0,
   video2Duration = 0,
   musicIndex = 1,
-  r2BaseUrl = "", // Base public URL for assets on R2
+  r2BaseUrl = '', // Base public URL for assets on R2
 }) => {
   const { hook, problem, solution, cta } = sequences;
   const { durationInFrames } = useVideoConfig();
@@ -148,7 +148,7 @@ export const ASFAT1: React.FC<ASFAT1Props> = ({
   const fill2 = durationInFrames - t2;
 
   // Helper to pad numbers to 4 digits
-  const pad = (n: number | string) => String(n).padStart(4, "0");
+  const pad = (n: number | string) => String(n).padStart(4, '0');
 
   // Background Videos from R2 (with local fallback)
   const bg1 = r2BaseUrl
@@ -165,7 +165,11 @@ export const ASFAT1: React.FC<ASFAT1Props> = ({
     : staticFile(`background_music/astro-background-music-${musicIndex}.mp3`);
 
   // Simple conditional loop component
-  const SmartVideo: React.FC<{ src: string; videoDuration: number; fillDuration: number }> = ({ src, videoDuration, fillDuration }) => {
+  const SmartVideo: React.FC<{ src: string; videoDuration: number; fillDuration: number }> = ({
+    src,
+    videoDuration,
+    fillDuration,
+  }) => {
     const vDuration = Math.round(videoDuration);
     const fDuration = Math.round(fillDuration);
 
@@ -175,7 +179,7 @@ export const ASFAT1: React.FC<ASFAT1Props> = ({
         <Loop durationInFrames={vDuration}>
           <OffthreadVideo
             src={src}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             muted
           />
         </Loop>
@@ -185,7 +189,7 @@ export const ASFAT1: React.FC<ASFAT1Props> = ({
     return (
       <OffthreadVideo
         src={src}
-        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
         muted
       />
     );
@@ -201,32 +205,24 @@ export const ASFAT1: React.FC<ASFAT1Props> = ({
       {/* Background Layer 1: Start to T2 (Solution Start) */}
       <Sequence from={0} durationInFrames={fill1}>
         <AbsoluteFill>
-          <SmartVideo
-            src={bg1}
-            videoDuration={video1Duration}
-            fillDuration={fill1}
-          />
+          <SmartVideo src={bg1} videoDuration={video1Duration} fillDuration={fill1} />
         </AbsoluteFill>
       </Sequence>
 
       {/* Background Layer 2: T2 to End */}
       <Sequence from={t2} durationInFrames={fill2}>
         <AbsoluteFill>
-          <SmartVideo
-            src={bg2}
-            videoDuration={video2Duration}
-            fillDuration={fill2}
-          />
+          <SmartVideo src={bg2} videoDuration={video2Duration} fillDuration={fill2} />
         </AbsoluteFill>
       </Sequence>
 
       {/* Dark Overlay for readability (Global) */}
-      <AbsoluteFill style={{ pointerEvents: "none" }}>
+      <AbsoluteFill style={{ pointerEvents: 'none' }}>
         <div
           style={{
-            position: "absolute",
+            position: 'absolute',
             inset: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
           }}
         />
       </AbsoluteFill>
