@@ -1,44 +1,30 @@
 # 1. Base image with common system dependencies for Remotion
-FROM node:20.11-bookworm-slim AS base
+FROM node:20-alpine AS base
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN apt-get update && apt-get install -y \
+RUN apk add --no-cache \
     ffmpeg \
-    libnss3 \
-    libnspr4 \
-    libatk1.0-0 \
-    libatk-bridge2.0-0 \
-    libcups2 \
-    libdrm2 \
-    libxkbcommon0 \
-    libxcomposite1 \
-    libxdamage1 \
-    libxext6 \
-    libxfixes3 \
-    libxrandr2 \
-    libgbm1 \
-    libasound2 \
-    libpangocairo-1.0-0 \
-    libxshmfence1 \
-    fonts-liberation \
-    lsb-release \
-    xdg-utils \
-    wget \
-    curl \
-    --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
+    chromium \
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont \
+    libstdc++ \
+    chromium-chromedriver
 
 # 2. Dependencies stage (cached)
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY prisma ./prisma/
-RUN HUSKY=0 npm ci
+RUN npm ci --ignore-scripts
 
 # 3. Builder stage
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+# Generate Prisma Client (force binary target for linux-musl-openssl-3.0.x if needed, but usually auto-detected)
 RUN npx prisma generate
 RUN npm run build
 RUN npm run build:worker
