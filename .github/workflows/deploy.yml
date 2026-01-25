@@ -40,9 +40,23 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          command_timeout: 60m
           script: |
             cd ~/flownau
             git pull origin main
             docker compose up -d --build
             # Run migrations using the production-safe 'migrate deploy' command
             docker compose run --rm app npx prisma migrate deploy
+
+      - name: Notify on Telegram
+        uses: appleboy/telegram-action@master
+        if: always()
+        with:
+          to: 5109114390
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            🚀 *Deployment for Flownaŭ*
+            
+            *Status:* ${{ job.status == 'success' && '✅ Success' || '❌ Failed' }}
+            *Commit:* ${{ github.event.head_commit.message }}
+            *Link:* https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}

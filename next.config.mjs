@@ -10,6 +10,13 @@ const nextConfig = {
       },
     ],
   },
+  // Skip checks during build (handled by CI) to speed up Docker build
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 export default nextConfig;

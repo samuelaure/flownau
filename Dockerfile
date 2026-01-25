@@ -1,10 +1,6 @@
-# Base image for dependencies
-FROM node:20-slim AS base
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
-
-# Install necessary system dependencies for Remotion/Puppeteer & FFmpeg
+# 1. Base image with common system dependencies for Remotion
+FROM node:20.11-bookworm-slim AS base
+ENV NEXT_TELEMETRY_DISABLED=1
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     libnss3 \
@@ -31,52 +27,42 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-# Install dependencies only when needed
+# 2. Dependencies stage (cached)
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY prisma ./prisma/
-RUN npm ci
+RUN HUSKY=0 npm ci
 
-# Builder stage
+# 3. Builder stage
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN mkdir -p public
-# Generate Prisma Client
 RUN npx prisma generate
-# Build Next.js
 RUN npm run build
-# Build Background Worker
 RUN npm run build:worker
 
-# Runner stage
+# 4. Final runner stage
 FROM base AS runner
 WORKDIR /app
-
 ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN groupadd --gid 1001 nodejs
 RUN useradd --uid 1001 --gid 1001 -m nextjs
 
-# Copy standalone build and necessary files
-RUN mkdir -p public
-COPY --from=builder /app/public ./public
+# Copy web files from standalone build (includes server.js and node_modules)
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/dist/worker.js ./worker.js
-# Copy Prisma for the worker/migrations
-COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma/client ./node_modules/@prisma/client
 
-# Next.js standalone server entry point
+# Copy worker and prisma files
+COPY --from=builder --chown=nextjs:nodejs /app/dist ./dist
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+
+USER nextjs
 EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
-
-USER nextjs
 
 CMD ["node", "server.js"]
