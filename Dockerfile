@@ -48,6 +48,8 @@ RUN mkdir -p public
 RUN npx prisma generate
 # Build Next.js
 RUN npm run build
+# Build Background Worker
+RUN npm run build:worker
 
 # Runner stage
 FROM base AS runner
@@ -64,6 +66,7 @@ RUN mkdir -p public
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/dist/worker.js ./worker.js
 # Copy Prisma for the worker/migrations
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma

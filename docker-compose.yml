@@ -55,7 +55,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: flownau_worker
-    command: npm run worker
+    command: npm run worker:prod
     restart: always
     env_file: .env
     depends_on:
