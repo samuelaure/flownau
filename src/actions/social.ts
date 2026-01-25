@@ -6,15 +6,12 @@ import { encrypt, decrypt } from '@/lib/crypto';
 import { revalidatePath } from 'next/cache';
 
 export async function addInstagramAccount(
-  workspaceId: string,
   profileName: string,
   platformId: string,
   accessToken: string
 ) {
   const session = await auth();
-  if (!session?.user) throw new Error('Unauthorized');
-
-  // TODO: Verify if user has access to workspace
+  if (!session?.user?.id) throw new Error('Unauthorized');
 
   const encryptedToken = encrypt(accessToken);
 
@@ -24,11 +21,11 @@ export async function addInstagramAccount(
       profileName,
       platformId,
       accessToken: encryptedToken,
-      workspaceId,
+      userId: session.user.id,
     },
   });
 
-  revalidatePath(`/dashboard/${workspaceId}/settings/social`);
+  revalidatePath('/dashboard/settings/social');
   return { success: true, accountId: account.id };
 }
 

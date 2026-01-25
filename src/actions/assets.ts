@@ -11,15 +11,16 @@ import { AuthenticationError, ValidationError } from '@/lib/exceptions';
 import { handleActionError } from '@/lib/error-handler';
 import { r2Logger } from '@/lib/logger';
 
-export async function uploadAsset(formData: FormData, workspaceId: string, projectId: string) {
+export async function uploadAsset(formData: FormData, projectId: string) {
   try {
     const session = await auth();
-    if (!session?.user) throw new AuthenticationError();
+    if (!session?.user?.id) throw new AuthenticationError();
+    const userId = session.user.id;
 
     const file = formData.get('file') as File;
     if (!file) throw new ValidationError('No file uploaded');
 
-    r2Logger.info({ workspaceId, projectId, fileName: file.name }, 'Starting asset upload');
+    r2Logger.info({ userId, projectId, fileName: file.name }, 'Starting asset upload');
 
     const buffer = Buffer.from(await file.arrayBuffer());
     const hash = crypto.createHash('sha256').update(buffer).digest('hex');
@@ -50,8 +51,8 @@ export async function uploadAsset(formData: FormData, workspaceId: string, proje
         ? 'AUDIO'
         : 'IMAGE';
 
-    // Naming convention: {workspaceId}/{projectId}/{type}/{hash}.{ext}
-    const r2Key = `${workspaceId}/${projectId}/${assetType.toLowerCase()}s/${hash}.${extension}`;
+    // Naming convention: {projectId}/{type}/{hash}.{ext} (Removed workspaceId)
+    const r2Key = `${projectId}/${assetType.toLowerCase()}s/${hash}.${extension}`;
 
     await r2Client.send(
       new PutObjectCommand({
@@ -64,7 +65,7 @@ export async function uploadAsset(formData: FormData, workspaceId: string, proje
 
     const asset = await prisma.asset.create({
       data: {
-        type: assetType,
+        type: assetType as any,
         systemFilename: `${hash}.${extension}`,
         originalFilename: file.name,
         hash,
@@ -77,7 +78,7 @@ export async function uploadAsset(formData: FormData, workspaceId: string, proje
 
     r2Logger.info({ assetId: asset.id, r2Key }, 'Asset uploaded successfully');
 
-    revalidatePath(`/dashboard/${workspaceId}/projects/${projectId}`);
+    revalidatePath(`/dashboard/projects/${projectId}`);
 
     return {
       success: true,

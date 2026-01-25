@@ -1,0 +1,29 @@
+services:
+  # --- OVERRIDE PATTERN EXAMPLE ---
+  # Rename this file to docker-compose.override.yml on the server
+  # to hook into the shared infrastructure layer.
+
+  postgres:
+    profiles: ["donotstart"] # Disable local DB container
+
+  redis:
+    profiles: ["donotstart"] # Disable local Redis container
+
+  app:
+    networks:
+      - shared-mesh
+    environment:
+      # Point to shared containers (names defined in infrastructure/docker-compose.yml)
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@shared_postgres:5432/${POSTGRES_DB}?schema=public
+      - REDIS_HOST=shared_redis
+
+  worker:
+    networks:
+      - shared-mesh
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@shared_postgres:5432/${POSTGRES_DB}?schema=public
+      - REDIS_HOST=shared_redis
+
+networks:
+  shared-mesh:
+    external: true

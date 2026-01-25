@@ -22,7 +22,10 @@ model User {
 
   accounts      Account[]
   sessions      Session[]
-  workspaces    WorkspaceMember[]
+  
+  // Direct ownership in simplified single-user architecture
+  projects      Project[]
+  socialAccounts SocialAccount[]
 }
 
 model Account {
@@ -37,55 +40,31 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([provider, providerAccountId])
 }
- 
+
 model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@id([identifier, token])
-}
-
-model Workspace {
-  id          String   @id @default(cuid())
-  name        String
-  slug        String   @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  projects    Project[]
-  members     WorkspaceMember[]
-  socialAccounts SocialAccount[]
-}
-
-model WorkspaceMember {
-  id          String    @id @default(cuid())
-  workspaceId String
-  userId      String
-  role        WorkspaceRole @default(MEMBER)
-  
-  workspace   Workspace @relation(fields: [workspaceId], references: [id])
-  user        User      @relation(fields: [userId], references: [id])
-
-  @@unique([workspaceId, userId])
 }
 
 // --- Core Entities ---
@@ -94,7 +73,7 @@ model Project {
   id             String    @id @default(cuid())
   name           String
   description    String?
-  shortCode      String    // e.g., "ASFA" (Unique per workspace ideally)
+  shortCode      String    // e.g., "ASFA"
   
   // Counters for Butler naming convention
   videoCounter   Int       @default(0)
@@ -103,13 +82,13 @@ model Project {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   
-  workspaceId    String
-  workspace      Workspace @relation(fields: [workspaceId], references: [id])
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   assets         Asset[]
   renders        Render[]
 
-  @@unique([workspaceId, shortCode])
+  @@unique([userId, shortCode])
 }
 
 model Asset {
@@ -120,7 +99,7 @@ model Asset {
   originalFilename String
   hash             String    // SHA-256
   
-  r2Key            String    // "workspace/project/videos/filename.mp4"
+  r2Key            String    // "project/videos/filename.mp4"
   r2Url            String?   
   
   sizeBytes        BigInt
@@ -134,7 +113,7 @@ model Asset {
   deletedAt        DateTime?
   
   projectId        String
-  project          Project   @relation(fields: [projectId], references: [id])
+  project          Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@unique([projectId, hash])
   @@index([systemFilename])
@@ -157,10 +136,10 @@ model SocialAccount {
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   
-  workspaceId    String
-  workspace      Workspace     @relation(fields: [workspaceId], references: [id])
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([workspaceId, platform, platformId])
+  @@unique([userId, platform, platformId])
 }
 
 // --- Jobs & Rendering ---
@@ -179,7 +158,7 @@ model Render {
   updatedAt      DateTime    @updatedAt
   
   projectId      String
-  project        Project     @relation(fields: [projectId], references: [id])
+  project        Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   jobs           Job[]
 }
@@ -200,7 +179,7 @@ model Job {
   updatedAt      DateTime    @updatedAt
   
   renderId       String?
-  render         Render?     @relation(fields: [renderId], references: [id])
+  render         Render?     @relation(fields: [renderId], references: [id], onDelete: Cascade)
 }
 
 // --- Enums ---
@@ -208,13 +187,6 @@ model Job {
 enum Role {
   USER
   ADMIN
-}
-
-enum WorkspaceRole {
-  OWNER
-  ADMIN
-  MEMBER
-  VIEWER
 }
 
 enum AssetType {
@@ -247,4 +219,3 @@ enum JobStatus {
   COMPLETED
   FAILED
 }
-
