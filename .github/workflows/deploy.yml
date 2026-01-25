@@ -2,9 +2,9 @@ name: Build & Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: "npm"
       - name: Install dependencies
         run: npm ci
       - name: Prisma Generate
@@ -42,5 +42,5 @@ jobs:
             cd ~/flownau
             git pull origin main
             docker compose up -d --build
-            # Run migrations
-            docker compose exec -T app npx prisma db push
+            # Run migrations using the production-safe 'migrate deploy' command
+            docker compose run --rm app npx prisma migrate deploy
