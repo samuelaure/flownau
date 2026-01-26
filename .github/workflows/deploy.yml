@@ -60,6 +60,7 @@ jobs:
                   - shared-mesh
                 environment:
                   - REDIS_HOST=shared_redis
+                  - DATABASE_URL=postgresql://\${POSTGRES_USER}:\${POSTGRES_PASSWORD}@shared_postgres:5432/\${POSTGRES_DB}?schema=public
             networks:
               shared-mesh:
                 external: true
