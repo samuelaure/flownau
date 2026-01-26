@@ -41,7 +41,8 @@ export class IngestionService {
     try {
       await fs.writeFile(tempPath, buffer);
 
-      // 1. Hash
+      // 1. Hash (streaming from disk to be safe for large files in future,
+      // though here we already have the buffer, let's just use it)
       const hash = crypto.createHash('sha256').update(buffer).digest('hex');
 
       // 2. Deduplication Check
@@ -67,19 +68,25 @@ export class IngestionService {
         }
       }
 
-      // 4. R2 Upload
+      // 4. R2 Upload (Streaming from Disk)
       const extension = originalName.split('.').pop() || '';
       const typeCategory = isVideo ? 'videos' : isAudio ? 'audios' : 'images';
       const r2Key = `${projectId}/${typeCategory}/${hash}.${extension}`;
 
-      await r2Client.send(
-        new PutObjectCommand({
+      const { Upload } = await import('@aws-sdk/lib-storage');
+      const { createReadStream } = await import('fs');
+
+      const upload = new Upload({
+        client: r2Client,
+        params: {
           Bucket: process.env.R2_BUCKET_NAME!,
           Key: r2Key,
-          Body: buffer,
+          Body: createReadStream(tempPath),
           ContentType: mimeType,
-        })
-      );
+        },
+      });
+
+      await upload.done();
 
       // 5. Database Record
       const assetType = isVideo ? 'VIDEO' : isAudio ? 'AUDIO' : 'IMAGE';
@@ -105,7 +112,8 @@ export class IngestionService {
       return { success: false, error: error.message };
     } finally {
       try {
-        await fs.unlink(tempPath);
+        const { unlink } = await import('fs/promises');
+        await unlink(tempPath);
       } catch (e) {
         /* ignore */
       }

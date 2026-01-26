@@ -27,3 +27,7 @@ export const renderQueue = new Queue('render-queue', {
 export const publishQueue = new Queue('publish-queue', {
   connection: redisConnection,
 });
+
+export const automationQueue = new Queue('automation-queue', {
+  connection: redisConnection,
+});

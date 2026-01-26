@@ -1,48 +1,35 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
+import path from 'path';
+
+// Load env variables
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const email = process.env.ADMIN_EMAIL;
-  const password = process.env.ADMIN_PASSWORD;
+  const email = process.env.ADMIN_EMAIL || 'sam@9nau.com';
+  const password = process.env.ADMIN_PASSWORD || 'Password123!';
 
-  if (!email || !password) {
-    console.warn('⚠️ ADMIN_EMAIL or ADMIN_PASSWORD not set. Skipping admin user creation.');
-    return;
-  }
+  console.log('🌱 Seeding database with real account data...');
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  console.log('🌱 Seeding database...');
-
   const user = await prisma.user.upsert({
     where: { email },
-    update: {},
+    update: {
+      password: hashedPassword,
+    },
     create: {
       email,
-      name: 'Admin User',
+      name: 'Samuel Aure',
       password: hashedPassword,
       role: 'ADMIN',
     },
   });
 
-  const project = await prisma.project.upsert({
-    where: {
-      userId_shortCode: {
-        userId: user.id,
-        shortCode: 'MAIN',
-      },
-    },
-    update: {},
-    create: {
-      name: 'Main Project',
-      shortCode: 'MAIN',
-      user: { connect: { id: user.id } },
-    },
-  });
-
-  console.log(`✅ Seeded: User(${email}) in Project(${project.shortCode})`);
+  console.log(`✅ Seeded: User(${email}) with Admin role.`);
 }
 
 main()

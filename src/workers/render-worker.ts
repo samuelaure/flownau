@@ -5,7 +5,8 @@ import { renderMedia, selectComposition } from '@remotion/renderer';
 import { bundle } from '@remotion/bundler';
 import path from 'path';
 import os from 'os';
-import fs from 'fs/promises';
+import fs from 'fs';
+import fsPromises from 'fs/promises';
 import { r2Client } from '@/lib/r2';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 
@@ -65,16 +66,20 @@ export const renderWorker = new Worker(
       log.info('Render finished locally, uploading to R2');
 
       const r2Key = `${render.project.userId}/${render.projectId}/renders/${outputFilename}`;
-      const fileBuffer = await fs.readFile(outputPath);
+      const fileStream = fs.createReadStream(outputPath);
 
-      await r2Client.send(
-        new PutObjectCommand({
+      const { Upload } = await import('@aws-sdk/lib-storage');
+      const upload = new Upload({
+        client: r2Client,
+        params: {
           Bucket: process.env.R2_BUCKET_NAME!,
           Key: r2Key,
-          Body: fileBuffer,
+          Body: fileStream,
           ContentType: 'video/mp4',
-        })
-      );
+        },
+      });
+
+      await upload.done();
 
       await prisma.render.update({
         where: { id: renderId },
@@ -85,7 +90,7 @@ export const renderWorker = new Worker(
         },
       });
 
-      await fs.unlink(outputPath);
+      await fsPromises.unlink(outputPath);
       log.info({ r2Key }, 'Render fully completed and uploaded');
 
       return { success: true, r2Key };
@@ -100,5 +105,5 @@ export const renderWorker = new Worker(
       throw error;
     }
   },
-  { connection: redisConnection }
+  { connection: redisConnection, concurrency: 1 }
 );

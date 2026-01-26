@@ -76,6 +76,13 @@ model Project {
   description    String?
   shortCode      String    // e.g., "ASFA"
   
+  // Automation Settings
+  airtableBaseId  String?
+  airtableTableId String?
+  airtableToken   String?   // Optional override
+  
+  activeTemplateId String   @default("asfa-t1")
+  
   // Counters for Butler naming convention
   videoCounter   Int       @default(0)
   audioCounter   Int       @default(0)
@@ -88,6 +95,7 @@ model Project {
   
   assets         Asset[]
   renders        Render[]
+  socialAccounts SocialAccount[]
 
   @@unique([userId, shortCode])
 }
@@ -125,20 +133,23 @@ model Asset {
 model SocialAccount {
   id             String        @id @default(cuid())
   platform       SocialPlatform
-  profileName    String        // e.g. "astrologiafamiliar"
-  platformId     String        // e.g. IG Business ID
+  profileName    String?        // e.g. "astrologiafamiliar"
+  platformId     String?        // e.g. IG Business ID
   
-  // Security: Tokens are stored encrypted
-  accessToken    String        // Encrypted
+  // Security: Tokens are stored encrypted (or as is for now depending on implementation)
+  accessToken    String?        
   tokenExpiresAt DateTime?
   
-  refreshToken   String?       // Encrypted
+  refreshToken   String?       
   
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   
   userId         String
   user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  projectId      String?
+  project        Project?      @relation(fields: [projectId], references: [id])
 
   @@unique([userId, platform, platformId])
 }

@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import { AssetUploader } from '@/app/dashboard/assets/_components/asset-uploader';
 import { AssetGrid } from '@/app/dashboard/assets/_components/asset-grid';
+import { AutomationTrigger } from './_components/automation-trigger';
 
 // Reusing AssetGrid logic but filtering via props in future iteration
 // For now, simpler implementation specific to project
@@ -38,10 +39,8 @@ export default async function ProjectDetailsPage({ params }: { params: { project
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-xl font-semibold">Content Feed</h3>
-          <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-8 text-center text-zinc-500">
-            Coming in Phase 4: Automation Scheduler & Feed
-          </div>
+          <h3 className="text-xl font-semibold">Engine Control</h3>
+          <AutomationTrigger projectId={project.id} />
         </div>
       </div>
 
