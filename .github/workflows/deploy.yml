@@ -44,7 +44,7 @@ jobs:
           script: |
             cd ~/flownau
             git pull origin main
-            
+
             # --- Shared Infrastructure Overlay ---
             # Create override file to use shared DB
             cat > docker-compose.override.yml <<EOF
@@ -63,7 +63,7 @@ jobs:
               shared-mesh:
                 external: true
             EOF
-            
+
             docker compose up -d --build
             # Run migrations using the production-safe 'migrate deploy' command
             docker compose run --rm app npx prisma migrate deploy
@@ -76,7 +76,7 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
             🚀 *Deployment for Flownaŭ*
-            
+
             *Status:* ${{ job.status == 'success' && '✅ Success' || '❌ Failed' }}
             *Commit:* ${{ github.event.head_commit.message }}
             *Link:* https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
