@@ -22,7 +22,7 @@ export const renderWorker = new Worker(
     try {
       const render = await prisma.render.findUnique({
         where: { id: renderId },
-        include: { project: { include: { workspace: true } } },
+        include: { project: { include: { user: true } } },
       });
 
       if (!render) {
@@ -64,7 +64,7 @@ export const renderWorker = new Worker(
 
       log.info('Render finished locally, uploading to R2');
 
-      const r2Key = `${render.project.workspaceId}/${render.projectId}/renders/${outputFilename}`;
+      const r2Key = `${render.project.userId}/${render.projectId}/renders/${outputFilename}`;
       const fileBuffer = await fs.readFile(outputPath);
 
       await r2Client.send(

@@ -10,6 +10,7 @@ import crypto from 'crypto';
 import { AuthenticationError, ValidationError } from '@/lib/exceptions';
 import { handleActionError } from '@/lib/error-handler';
 import { r2Logger } from '@/lib/logger';
+import { IngestionService } from '@/lib/ingestion-service';
 
 export async function uploadAsset(formData: FormData, projectId: string) {
   try {
