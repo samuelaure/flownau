@@ -57,7 +57,6 @@ jobs:
                 networks:
                   - shared-mesh
                 environment:
-                  - DATABASE_URL=${{ secrets.DATABASE_URL_PROD }}
                   - REDIS_HOST=shared_redis
             networks:
               shared-mesh:

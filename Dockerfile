@@ -30,8 +30,8 @@ COPY . .
 # Generate Prisma Client
 RUN npx prisma generate
 
-# Build Next.js (Standalone mode)
-# This includes the Pre-bundled Remotion step (via npm run build:remotion inside build)
+# Build Next.js and Worker
+RUN npm run build:worker
 RUN npm run build
 
 # 4. Final runner stage
@@ -48,8 +48,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Copy artifacts needed for runtime (Bundled Remotion, Prisma schemas)
-COPY --from=builder --chown=nextjs:nodejs /app/out/remotion-bundle.js ./out/remotion-bundle.js
+# Copy artifacts needed for runtime (Bundled Remotion, Worker, Prisma)
+COPY --from=builder --chown=nextjs:nodejs /app/out ./out
+COPY --from=builder --chown=nextjs:nodejs /app/dist ./dist
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
 USER nextjs

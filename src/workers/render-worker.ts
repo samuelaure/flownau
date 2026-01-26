@@ -40,16 +40,23 @@ export const renderWorker = new Worker(
       const outputFilename = `render_${renderId}.mp4`;
       const outputPath = path.join(os.tmpdir(), outputFilename);
 
-      const bundled = await bundle(BUNDLE_PATH);
+      let serveUrl: string;
+
+      if (process.env.NODE_ENV === 'production') {
+        serveUrl = path.join(process.cwd(), 'out');
+      } else {
+        serveUrl = await bundle(BUNDLE_PATH);
+      }
+
       const composition = await selectComposition({
-        serveUrl: bundled,
+        serveUrl,
         id: 'Main',
         inputProps: render.params as any,
       });
 
       await renderMedia({
         composition,
-        serveUrl: bundled,
+        serveUrl,
         codec: 'h264',
         outputLocation: outputPath,
         inputProps: render.params as any,

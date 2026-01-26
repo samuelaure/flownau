@@ -1,12 +1,13 @@
 {
   "name": "flownau",
-  "version": "1.3.6",
+  "version": "1.3.7",
   "private": true,
   "author": "Samuel Aure",
   "description": "Unified platform merging Astromatic and R2 Media Butler",
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "prisma generate && npm run build:remotion && next build",
+    "build:remotion": "remotion bundle src/remotion/index.ts --out-dir=out --public-dir=public",
     "start": "next start",
     "lint": "next lint",
     "test": "vitest",
