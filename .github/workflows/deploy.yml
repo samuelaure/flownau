@@ -44,6 +44,26 @@ jobs:
           script: |
             cd ~/flownau
             git pull origin main
+            
+            # --- Shared Infrastructure Overlay ---
+            # Create override file to use shared DB
+            cat > docker-compose.override.yml <<EOF
+            services:
+              postgres:
+                profiles: ["donotstart"]
+              redis:
+                profiles: ["donotstart"]
+              app:
+                networks:
+                  - shared-mesh
+                environment:
+                  - DATABASE_URL=${{ secrets.DATABASE_URL_PROD }}
+                  - REDIS_HOST=shared_redis
+            networks:
+              shared-mesh:
+                external: true
+            EOF
+            
             docker compose up -d --build
             # Run migrations using the production-safe 'migrate deploy' command
             docker compose run --rm app npx prisma migrate deploy
