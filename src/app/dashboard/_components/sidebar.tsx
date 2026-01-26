@@ -13,7 +13,6 @@ export function Sidebar() {
         <nav className="flex-1 space-y-2 p-4">
           <NavItem href="/dashboard" icon={Home} label="Overview" />
           <NavItem href="/dashboard/projects" icon={Layers} label="Projects" />
-          <NavItem href="/dashboard/renderer" icon={PlaySquare} label="Renderer" />
           <NavItem href="/dashboard/assets" icon={UploadCloud} label="Asset Library" />
           <NavItem href="/dashboard/settings" icon={Settings} label="Settings" />
         </nav>

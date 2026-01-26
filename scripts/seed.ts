@@ -12,7 +12,14 @@ async function main() {
   const email = process.env.ADMIN_EMAIL || 'sam@9nau.com';
   const password = process.env.ADMIN_PASSWORD || 'Password123!';
 
-  console.log('🌱 Seeding database with real account data...');
+  console.log('🧹 Cleaning database...');
+  await prisma.job.deleteMany();
+  await prisma.render.deleteMany();
+  await prisma.socialAccount.deleteMany();
+  await prisma.asset.deleteMany();
+  await prisma.project.deleteMany();
+
+  console.log('🌱 Seeding database with clean account data...');
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
