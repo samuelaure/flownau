@@ -33,7 +33,7 @@ export default function OnboardingPage() {
                 <Input
                   id="projectName"
                   name="projectName"
-                  placeholder="e.g. Astrologia Familiar"
+                  placeholder="e.g. My Media Brand"
                   required
                 />
               </div>
@@ -42,7 +42,7 @@ export default function OnboardingPage() {
                 <Input
                   id="shortCode"
                   name="shortCode"
-                  placeholder="ASFA"
+                  placeholder="MMB"
                   maxLength={6}
                   required
                   className="uppercase"
