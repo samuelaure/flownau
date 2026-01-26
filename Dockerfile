@@ -34,6 +34,7 @@ RUN npx prisma generate
 # Build Next.js and Worker
 RUN npm run build:worker
 RUN npm run build
+RUN npm run build:seed
 
 # 4. Final runner stage
 FROM base AS runner

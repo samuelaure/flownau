@@ -70,6 +70,9 @@ jobs:
             # Run migrations using the production-safe 'migrate deploy' command
             docker compose run --rm app npx prisma@5 migrate deploy
 
+            # Seed the database (requires ADMIN_EMAIL and ADMIN_PASSWORD in .env)
+            docker compose run --rm app node dist/seed.js
+
       - name: Notify on Telegram
         uses: appleboy/telegram-action@master
         if: always()

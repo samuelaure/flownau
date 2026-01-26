@@ -1,6 +1,6 @@
 {
   "name": "flownau",
-  "version": "1.3.16",
+  "version": "1.3.17",
   "private": true,
   "author": "Samuel Aure",
   "description": "Unified platform merging Astromatic and R2 Media Butler",
@@ -21,7 +21,11 @@
     "remotion:render": "remotion render src/remotion/index.ts Main out/video.mp4",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "build:seed": "esbuild scripts/seed.ts --bundle --platform=node --outfile=dist/seed.js --external:@prisma/client"
+  },
+  "prisma": {
+    "seed": "tsx scripts/seed.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,css,md,json}": "prettier --write"

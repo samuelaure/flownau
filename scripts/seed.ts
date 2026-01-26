@@ -4,8 +4,13 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-  const email = 'admin@flownau.com';
-  const password = 'password123'; // CHANGE THIS IN PRODUCTION
+  const email = process.env.ADMIN_EMAIL;
+  const password = process.env.ADMIN_PASSWORD;
+
+  if (!email || !password) {
+    console.warn('⚠️ ADMIN_EMAIL or ADMIN_PASSWORD not set. Skipping admin user creation.');
+    return;
+  }
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -22,22 +27,22 @@ async function main() {
     },
   });
 
-  const workspace = await prisma.workspace.upsert({
-    where: { slug: 'default' },
+  const project = await prisma.project.upsert({
+    where: {
+      userId_shortCode: {
+        userId: user.id,
+        shortCode: 'MAIN',
+      },
+    },
     update: {},
     create: {
-      name: 'Main Workspace',
-      slug: 'default',
-      members: {
-        create: {
-          userId: user.id,
-          role: 'OWNER',
-        },
-      },
+      name: 'Main Project',
+      shortCode: 'MAIN',
+      user: { connect: { id: user.id } },
     },
   });
 
-  console.log(`✅ Seeded: User(${email}) in Workspace(${workspace.slug})`);
+  console.log(`✅ Seeded: User(${email}) in Project(${project.shortCode})`);
 }
 
 main()
