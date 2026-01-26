@@ -65,7 +65,7 @@ jobs:
 
             docker compose up -d --build
             # Run migrations using the production-safe 'migrate deploy' command
-            docker compose run --rm app npx prisma migrate deploy
+            docker compose run --rm app npx prisma@5 migrate deploy
 
       - name: Notify on Telegram
         uses: appleboy/telegram-action@master

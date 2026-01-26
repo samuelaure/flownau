@@ -1,6 +1,6 @@
 {
   "name": "flownau",
-  "version": "1.3.11",
+  "version": "1.3.12",
   "private": true,
   "author": "Samuel Aure",
   "description": "Unified platform merging Astromatic and R2 Media Butler",
@@ -69,6 +69,7 @@
     "tailwind-merge": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
     "tw-animate-css": "^1.4.0",
+    "prisma": "^5.21.0",
     "zod": "3.22.3"
   },
   "devDependencies": {
@@ -91,7 +92,6 @@
     "postcss": "^8.5.6",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "prisma": "^5.21.0",
     "tailwindcss": "^4.1.18",
     "tsc-alias": "^1.8.16",
     "tsx": "^4.21.0",
