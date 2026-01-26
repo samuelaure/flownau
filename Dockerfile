@@ -4,6 +4,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # Install Chromium and FFmpeg (Essential for Remotion)
 RUN apk add --no-cache \
     ffmpeg \
+    openssl \
     chromium \
     nss \
     freetype \
