@@ -12,24 +12,21 @@ import {
 } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
 import { Upload, Loader2 } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 
 type Project = { id: string; name: string; shortCode: string };
 
 export function AssetUploader({ projects }: { projects: Project[] }) {
   const [selectedProjectId, setSelectedProjectId] = useState<string>(projects[0]?.id || '');
   const [isUploading, setIsUploading] = useState(false);
-  const { toast } = useToast();
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
     if (!selectedProjectId) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: 'Please select a project first',
-        variant: 'destructive',
       });
       return;
     }
@@ -41,21 +38,17 @@ export function AssetUploader({ projects }: { projects: Project[] }) {
     try {
       const result = await uploadAsset(formData, selectedProjectId);
       if (result.success) {
-        toast({
-          title: result.deduplicated ? 'Duplicate Detected' : 'Upload Complete',
+        toast.info(result.deduplicated ? 'Duplicate Detected' : 'Upload Complete', {
           description: result.deduplicated
             ? 'This file already exists. We linked it to the project.'
             : 'Asset processed and uploaded to R2 successfully.',
-          variant: result.deduplicated ? 'default' : 'default',
         });
       } else {
         throw new Error('Upload failed');
       }
     } catch (error) {
-      toast({
-        title: 'Upload Failed',
+      toast.error('Upload Failed', {
         description: 'Could not upload asset.',
-        variant: 'destructive',
       });
     } finally {
       setIsUploading(false);
