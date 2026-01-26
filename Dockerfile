@@ -1,6 +1,7 @@
 # 1. Base image with common system dependencies for Remotion
 FROM node:20-alpine AS base
 ENV NEXT_TELEMETRY_DISABLED=1
+# Install Chromium and FFmpeg (Essential for Remotion)
 RUN apk add --no-cache \
     ffmpeg \
     chromium \
@@ -17,38 +18,45 @@ FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY prisma ./prisma/
-RUN npm ci --ignore-scripts
+# Install dependencies including devDeps for build
+RUN npm ci
 
 # 3. Builder stage
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# Generate Prisma Client (force binary target for linux-musl-openssl-3.0.x if needed, but usually auto-detected)
+
+# Generate Prisma Client
 RUN npx prisma generate
+
+# Build Next.js (Standalone mode)
+# This includes the Pre-bundled Remotion step (via npm run build:remotion inside build)
 RUN npm run build
-RUN npm run build:worker
 
 # 4. Final runner stage
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
-RUN groupadd --gid 1001 nodejs
-RUN useradd --uid 1001 --gid 1001 -m nextjs
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-# Copy web files from standalone build (includes server.js and node_modules)
+# Copy web files from standalone build
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Copy worker and prisma files
-COPY --from=builder --chown=nextjs:nodejs /app/dist ./dist
+# Copy artifacts needed for runtime (Bundled Remotion, Prisma schemas)
+COPY --from=builder --chown=nextjs:nodejs /app/out/remotion-bundle.js ./out/remotion-bundle.js
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
 USER nextjs
+
 EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
+# Boot the unified application (Web + Internal Scheduler + Workers)
 CMD ["node", "server.js"]
